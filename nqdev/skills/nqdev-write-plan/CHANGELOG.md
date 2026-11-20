@@ -2,6 +2,22 @@
 
 Định dạng theo [Keep a Changelog](https://keepachangelog.com/), phiên bản theo Semantic Versioning.
 
+## [1.8.0] — 2026-11-20
+
+### Changed
+- File giao việc `.jsonl` chỉ dùng cho **plan lớn**: thoả ít nhất một trong ≥ 10 bước, `estimated_hours` ≥ 40, hoặc có ≥ 2 bước chạy song song / giao agent khác `main`. Lúc duyệt plan, skill đề xuất, người dùng chốt. Plan nhỏ làm thẳng theo bảng Tiến độ, không có bảng Giao việc.
+
+### Added
+- Trường frontmatter `assign_tasks` (`true` = plan lớn, dùng file giao việc; `false` hoặc trống = không). Plan cũ không có trường này: có bảng Giao việc thì coi như `true`.
+
+## [1.7.0] — 2026-11-20
+
+### Added
+- Trạng thái `approved` trong vòng đời plan (`planning → approved → in_progress → completed`), khớp với `status: approved` mà `nqdev-task-flow` dùng.
+- Bảng *Giao việc* (`# | Agent | Lô | Phụ thuộc`) trong template Pre, điền khi plan được duyệt.
+- Mục *File giao việc (.jsonl)*: khi plan `approved`, sinh `.claude/assign-tasks/<tên plan>.jsonl`, mỗi bước một dòng gồm `plan`, `step`, `agent`, `batch`, `depends_on`, `status`, `started_at`, `ended_at`. Plan là nguồn đúng, lệch hoặc mất file thì sinh lại; chỉ agent điều phối được ghi; thư mục không commit.
+- `references/example-plan.md`: ví dụ Pre có bảng Giao việc và file `.jsonl` khớp bảng Tiến độ.
+
 ## [1.6.1] — 2026-11-20
 
 ### Changed

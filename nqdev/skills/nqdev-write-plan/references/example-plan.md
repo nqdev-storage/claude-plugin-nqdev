@@ -21,6 +21,7 @@ related_prs: []
 estimated_hours: 6
 time_spent_hours: 2.5
 completed_date:
+assign_tasks: true
 ---
 
 # Kế hoạch: Thêm rate limit cho API đăng nhập
@@ -50,6 +51,16 @@ Log tuần trước có nhiều đợt thử mật khẩu hàng loạt vào `POS
 | 5 | Ghi log khi chặn | bỏ | 2026-01-21 09:30 | 2026-01-21 10:00 | 30 | Đã có log chung ở middleware lỗi, không cần thêm |
 | **Tổng** | | | | | **150** | = 2.5h · Ước lượng: 6 |
 
+### Giao việc
+
+| # | Agent | Lô | Phụ thuộc |
+|---|---|---|---|
+| 1 | main | 1 | |
+| 2 | main | 2 | 1 |
+| 3 | main | 2 | 1 |
+| 4 | qa | 3 | 2, 3 |
+| 5 | main | 2 | 1 |
+
 ## 4. Risks và Unknowns
 
 - **Risk:** Redis mất kết nối làm chặn toàn bộ đăng nhập → **Mitigation:** lỗi Redis thì cho qua (fail-open) và log cảnh báo.
@@ -64,6 +75,16 @@ Log tuần trước có nhiều đợt thử mật khẩu hàng loạt vào `POS
 ## Nhật ký thay đổi plan
 
 - 2026-01-21: bỏ bước 5 (log khi chặn) — middleware lỗi đã ghi log `429`, thêm nữa là trùng.
+```
+
+File giao việc tương ứng, `.claude/assign-tasks/012-2026-01-20-login-rate-limit.jsonl` (không commit):
+
+```json
+{"plan":"plans/012-2026-01-20-login-rate-limit.md","step":1,"agent":"main","batch":1,"depends_on":[],"status":"done","started_at":"2026-01-20 09:00","ended_at":"2026-01-20 10:00"}
+{"plan":"plans/012-2026-01-20-login-rate-limit.md","step":2,"agent":"main","batch":2,"depends_on":[1],"status":"done","started_at":"2026-01-20 10:00","ended_at":"2026-01-20 10:30"}
+{"plan":"plans/012-2026-01-20-login-rate-limit.md","step":3,"agent":"main","batch":2,"depends_on":[1],"status":"doing","started_at":"2026-01-21 09:00","ended_at":null}
+{"plan":"plans/012-2026-01-20-login-rate-limit.md","step":4,"agent":"qa","batch":3,"depends_on":[2,3],"status":"todo","started_at":null,"ended_at":null}
+{"plan":"plans/012-2026-01-20-login-rate-limit.md","step":5,"agent":"main","batch":2,"depends_on":[1],"status":"skipped","started_at":"2026-01-21 09:30","ended_at":"2026-01-21 10:00"}
 ```
 
 ---
@@ -83,6 +104,7 @@ related_prs: []
 estimated_hours:
 time_spent_hours: 2.75
 completed_date:
+assign_tasks:
 ---
 
 # Nhật ký: Gộp 2 script deploy trùng lặp thành 1 script dùng chung
@@ -139,9 +161,13 @@ Hai script deploy được copy từ nhau rồi sửa tay nên lệch nhau: stag
 - H1 `# Kế hoạch:`; `estimated_hours: 6` làm tròn 0.5, là tổng end-to-end theo mô hình AI làm, DEV review; hàng Tổng ghi "Ước lượng: 6".
 - Mục 2 tách rõ phương án đã loại và **quyết định đã chốt với người dùng**, để phiên sau không đề xuất lại việc khoá tài khoản.
 - Bảng Tiến độ dùng đủ 4 trạng thái; bước `bỏ` có lý do, có dòng tương ứng trong Nhật ký thay đổi plan, và 30 phút đã làm vẫn tính vào Tổng.
+- **Plan lớn:** chỉ có 5 bước và ước lượng 6h (chưa tới ngưỡng 10 bước, 40h), nhưng lô 2 chạy song song 3 bước (điều kiện 3), nên khi duyệt đã chốt `assign_tasks: true`. Plan nhỏ hơn, VD 3 bước, ước lượng 2h, các bước nối tiếp nhau, thì `assign_tasks: false`: không có bảng Giao việc, không có `.jsonl`, làm thẳng theo bảng Tiến độ.
+- Bảng Giao việc là nguồn của file `.jsonl`: mỗi `#` một dòng, cùng agent, lô, phụ thuộc. Lô 2 có 3 bước (tối đa cho phép) và các bước này sửa các file khác nhau. Bước 4 (test) ở lô 3 vì phụ thuộc bước 2 và 3.
+- `.jsonl` khớp bảng Tiến độ: bước 3 làm 2 lần nên chỉ có một dòng `doing`, `started_at` là mốc của lần đầu, `ended_at` là `null` vì lần thứ hai chưa xong. Bước 5 `bỏ` thành `skipped`, vẫn giữ mốc thời gian.
 - Bước 3 làm qua 2 lần: dòng thứ hai cùng `#`, cột Bước ghi "(tiếp)". Dòng đang làm chưa có mốc kết thúc nên chưa có Delta; thời gian chờ DEV từ 09:30 đến 14:00 không được tính.
 
 **Ví dụ 2 (Post)**
+- `assign_tasks` để trống: nhật ký Post ghi lại việc đã làm, không dùng file giao việc.
 - H1 `# Nhật ký:`; `estimated_hours` trống vì việc đã làm xong mới ghi.
 - Mục 2 nêu cả "làm gì" lẫn "tại sao", kể cả lý do **giữ nguyên** bước seed dữ liệu.
 - Mục 3 có link tương đối tới từng file, file mới đánh dấu **Mới**; mục 4 nói rõ phần chưa làm; mục 5 chỉ gồm việc cố ý để sau.

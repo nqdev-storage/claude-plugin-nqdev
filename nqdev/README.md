@@ -2,7 +2,7 @@
 
 Bộ **skills** và **slash commands** của nqdev (QuyIT Platform) dành cho Claude Code, đóng gói thành một plugin để cài một lần dùng mọi nơi. Các skill xếp theo các giai đoạn của flow coding, từ thu thập yêu cầu tới deploy.
 
-Phiên bản plugin: **2.5.0** (2026-11-19) · 14 skill (gồm skill điều phối `nqdev-task-flow` với 4 workflow dựng sẵn) · 7 slash command.
+Phiên bản plugin: **2.6.0** (2026-11-20) · 14 skill (gồm skill điều phối `nqdev-task-flow` với 4 workflow dựng sẵn) · 7 slash command.
 
 ## Bắt đầu nhanh: workflow dựng sẵn
 
@@ -69,17 +69,17 @@ Giai đoạn Lập kế hoạch và Test đã có skill riêng, nhưng `nqdev-ta
 | `nqdev-brd-prd-writer` | 2.1.3 | Biến ý tưởng, ghi chú họp, yêu cầu khách hàng thành BRD, mỗi module một file trong `docs/brd/`, có mã BR/AC/UC. PRD chỉ viết khi được yêu cầu rõ. | Thu thập yêu cầu |
 | `nqdev-requirement-estimator` | 5.0.0 | Ước lượng theo giờ, bước 0.5 (dạng khoảng; AI làm, DEV review và góp ý) từ mô tả, spec hoặc BRD/PRD; chia module, phase MVP/sau MVP, rủi ro, câu hỏi cần làm rõ. Chỉ đọc. | Phân tích / Estimate |
 | `nqdev-design-to-artifact` | 3.5.1 | Thiết kế màn hình UI ở local từ `docs/prototype/_gen/`, dựng trang bấm thử được, kèm màn System Design. Chỉ publish khi có `--publish`. | Thiết kế (UI/UX) |
-| `nqdev-init-agents` | 1.7.1 | Tạo `CLAUDE.md`, `.claudeignore`, `.claude/rules/code-rules.md` (quy tắc DB, Git, Workflow, Comment, Testing; có quy tắc đề xuất `nqdev-task-flow`) cho repo. Không ghi đè file đã có. | Setup môi trường AI |
+| `nqdev-init-agents` | 1.8.0 | Tạo `CLAUDE.md`, `.claudeignore`, `.claude/rules/code-rules.md` (quy tắc DB, Git, Workflow, Comment, Testing; có quy tắc đề xuất `nqdev-task-flow`) và thư mục `draft/` cho repo. Không ghi đè file đã có. | Setup môi trường AI |
 | `nqdev-feature-implementer` | 1.1.1 | Code một tính năng theo plan và BRD, tuân thủ quy tắc repo, kèm test và bảng truy vết BR/AC. Không tự commit, push hay chạy lệnh DB. | Code |
 | `nqdev-bug-fixer` | 1.0.1 | Sửa bug theo trình tự: tái hiện, khoanh vùng, nguyên nhân gốc, sửa tối thiểu, test chống tái phát. | Code |
-| `nqdev-write-plan` | 1.5.0 | Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) vào `plans/<stt>-<YYYY-MM-DD>-<slug>.md`, có ước lượng và nhật ký thời gian, cập nhật trạng thái khi làm tiếp hoặc xong. | Lập kế hoạch |
+| `nqdev-write-plan` | 1.8.0 | Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) vào `plans/<stt>-<YYYY-MM-DD>-<slug>.md`, có ước lượng, bảng Tiến độ ghi mốc bắt đầu/kết thúc từng task, cập nhật trạng thái khi làm tiếp hoặc xong. Plan lớn có file giao việc `.claude/assign-tasks/*.jsonl` để chạy theo lô. | Lập kế hoạch |
 | `nqdev-test-case-writer` | 1.0.0 | Sinh test case thủ công từ AC (Cho/Khi/Thì) trong BRD hoặc tài liệu luồng nghiệp vụ; mỗi test case có mã `TC-` và ghi mã AC/BR, kèm ma trận phủ. Chỉ đọc. | Test |
 | `nqdev-unit-test-generator` | 1.0.0 | Viết unit test và integration test cho code có sẵn theo đúng framework và quy ước test của repo; chỉ ghi file test, không sửa code ứng dụng. | Test |
 | `nqdev-code-review` | 1.0.1 | Review diff, MR hoặc nhóm file theo bốn trục: đúng đắn, bảo mật, hiệu năng, quy tắc và yêu cầu. Trả bảng vấn đề theo mức độ. Chỉ đọc. | Review / Refactor |
 | `nqdev-merge-request-writer` | 1.0.2 | Soạn commit message và mô tả MR/PR từ diff, theo quy ước và template của repo, kèm mã BR/AC. Không tự commit, push hay tạo MR. | Review / Refactor |
 | `nqdev-release-note-writer` | 1.0.1 | Tổng hợp release note và checklist deploy (migration, cấu hình, rollback) giữa hai bản phát hành. Không tự tag, push hay deploy. | Deploy |
 | `nqdev-business-flow-extractor` | 1.1.2 | Đọc code để rút ra một luồng nghiệp vụ thành tài liệu cho PM/BA/QA/QC, có sơ đồ Mermaid và phụ lục `file:line`. | Tài liệu hoá |
-| `nqdev-task-flow` | 1.5.0 | Điều phối 4 workflow dựng sẵn (`feature`, `bugfix`, `init`, `release`): tự kích hoạt khi bạn yêu cầu tính năng, sửa bug, release (hỏi trước có chạy workflow không), mỗi lượt một bước, dừng chờ duyệt sau mọi bước, plan phải `approved` mới tới bước code, đưa lệnh cho người dùng gõ ở bước sửa code và commit. Không tự commit hay push. | Điều phối |
+| `nqdev-task-flow` | 1.7.0 | Điều phối 4 workflow dựng sẵn (`feature`, `bugfix`, `init`, `release`): tự kích hoạt khi bạn yêu cầu tính năng, sửa bug, release (hỏi trước có chạy workflow không), mỗi lượt một bước, dừng chờ duyệt sau mọi bước, plan phải `approved` mới tới bước code (plan lớn chạy theo lô từ file giao việc, duyệt sau mỗi lô), đưa lệnh cho người dùng gõ ở bước sửa code và commit. Không tự commit hay push. | Điều phối |
 
 ### Cách gọi skill
 
@@ -179,6 +179,7 @@ Cấu trúc của cả repo (marketplace, `docs/`, CI) xem ở [README của rep
 
 | Ngày | Thay đổi |
 |---|---|
+| 2026-11-20 | Plugin v2.6.0: `nqdev-write-plan` 1.8.0, bảng Tiến độ có cột `Bắt đầu \| Kết thúc \| Delta (phút)` cho từng lần làm task, bỏ mục Nhật ký thời gian, `time_spent_hours` = tổng Delta làm tròn 0.25h ở hàng Tổng; thêm trạng thái `approved`, trường `assign_tasks` và file giao việc `.claude/assign-tasks/<plan>.jsonl` cho plan lớn (≥ 10 bước, hoặc ≥ 40h, hoặc có bước chạy song song). `nqdev-task-flow` 1.7.0, plan lớn chạy bước `code` theo lô (tối đa 3 bước, giao agent theo `.jsonl`, duyệt sau mỗi lô). `nqdev-init-agents` 1.8.0, tạo thư mục `draft/`. |
 | 2026-11-19 | Plugin v2.5.0: `nqdev-write-plan` 1.5.0 đổi Template Pre thành Bối cảnh / Approach và quyết định đã chốt / Tiến độ (bảng `# | Bước | Trạng thái | Ghi chú`, trạng thái `chưa làm` / `đang làm` / `xong` / `bỏ`, thay checklist Todo) / Risks và Unknowns / Tiêu chí hoàn thành / Câu hỏi và Phụ thuộc; `references/example-plan.md` có thêm ví dụ Pre đang làm. Command `/nqdev:nqdev-cmd-plans-cleanup` nhận diện cả tên mục mới lẫn cũ. |
 | 2026-11-19 | Plugin v2.4.0: đổi mô hình estimate sang **AI là người làm, DEV là người review và góp ý**, đơn vị **giờ, bước 0.5**. `nqdev-requirement-estimator` 5.0.0 (**breaking**: bỏ person-day; mỗi dòng có 3 cột AI | DEV review | Tổng; Tổng = Dev + QA/UAT; bỏ PM và timeline theo tuần; kiểm tra khả thi so giờ DEV với quỹ giờ DEV; baseline viết lại, dựa trên kinh nghiệm, chưa đo). `nqdev-write-plan` 1.4.0 (`estimated_hours` bước 0.5, thời gian thực tế vẫn 0.25), `nqdev-design-to-artifact` 3.5.1 (chỉnh câu ước lượng giờ), `nqdev-brd-prd-writer` 2.1.3 (sửa mô tả trong README). |
 | 2026-11-19 | Plugin v2.3.0: đổi quy ước tên file plan từ `plans/YYYY-MM-DD-<slug>.md` thành `plans/<stt>-<YYYY-MM-DD>-<slug>.md` (`stt` là số thứ tự 3 chữ số, bộ đếm chung cho cả `plans/`). `nqdev-write-plan` 1.3.0 (thêm cách tính `stt`), `nqdev-task-flow` 1.5.0, `nqdev-feature-implementer` 1.1.1 và `nqdev-merge-request-writer` 1.0.2 (cập nhật ví dụ). Đã đổi tên 8 file trong `plans/` của repo này (`001-` đến `008-`). Repo đích có plan cũ không bắt buộc đổi tên; bộ đếm bỏ qua file chưa có `stt`. |

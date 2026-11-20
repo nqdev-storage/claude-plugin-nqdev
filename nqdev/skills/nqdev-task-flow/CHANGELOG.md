@@ -2,6 +2,22 @@
 
 Các phiên bản trước (khi skill còn tên `nqdev-flow`, tới 1.3.1) chưa có file này; xem mục "Lịch sử thay đổi" trong [nqdev/README.md](../../README.md).
 
+## [1.7.0] - 2026-11-20
+
+### Changed
+- Chạy theo lô chỉ áp dụng cho plan lớn (`assign_tasks: true`, theo ngưỡng của `nqdev-write-plan` 1.8.0). Lúc duyệt plan, đề xuất lớn/nhỏ để người dùng chốt; plan nhỏ không sinh `.jsonl`, bước `code` bàn giao từng bước như cũ.
+- `references/feature.md`: bước `plan`, `code` và "Dấu hiệu đã xong" cập nhật theo.
+
+## [1.6.0] - 2026-11-20
+
+### Added
+- Mục *Chạy theo lô* ở bước `code`: plan `approved` có file giao việc `.claude/assign-tasks/<tên plan>.jsonl` (sinh bởi `nqdev-write-plan` 1.7.0) và tool có subagent thì bốc lô theo `batch` và `depends_on` (tối đa 3 bước), giao cho `agent` ghi trong file, cập nhật `status` / `started_at` / `ended_at` ở `.jsonl` và mốc thời gian ở bảng Tiến độ của plan, dừng duyệt sau mỗi lô. Thiếu điều kiện thì bàn giao từng bước như cũ.
+
+### Changed
+- Duyệt plan: ngoài đổi `status: approved` còn điền bảng Giao việc và sinh `.jsonl`; sửa plan sau khi duyệt thì sinh lại `.jsonl`.
+- Ràng buộc 2 và 7: thêm ngoại lệ chạy theo lô (mỗi lượt một lô; luồng điều phối vẫn không tự sửa code).
+- `references/feature.md`: bước `plan`, `code` và bảng "Dấu hiệu đã xong" cập nhật theo.
+
 ## [1.5.0] - 2026-11-19
 
 ### Changed
