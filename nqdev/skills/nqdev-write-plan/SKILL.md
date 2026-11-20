@@ -1,18 +1,18 @@
 ---
 name: nqdev-write-plan
-description: "Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) thành file markdown trong thư mục plans/ ở gốc repo, theo quy ước plans/<stt>-<YYYY-MM-DD>-<slug>.md (stt là số thứ tự 3 chữ số) và template có frontmatter, bắt buộc có thời gian ước lượng, cộng dồn thời gian thực tế sau mỗi lần làm, và cập nhật trạng thái plan khi làm tiếp hoặc xong việc. Dùng khi người dùng nói \"viết execution plan\", \"lên kế hoạch rồi ghi vào plans\", \"ghi lại kế hoạch\", \"cập nhật trạng thái plan\", \"ghi nhận thời gian làm vào plan\", \"log công việc vừa làm\", \"viết nhật ký công việc\", \"lưu lại những gì vừa làm\", \"save work log\", \"record decision\", \"write execution plan\", hoặc khi một quy trình khác (VD Development Workflow Policy của nqdev-init-agents) yêu cầu viết plan trước khi code. Có thể chủ động đề xuất sau một chuỗi thay đổi đáng ghi, nhưng chỉ ghi file khi người dùng đồng ý. Không dùng khi người dùng chỉ muốn bàn kế hoạch trong chat, viết BRD/PRD (nqdev-brd-prd-writer) hay estimate (nqdev-requirement-estimator)."
+description: "Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) thành file markdown trong thư mục plans/ ở gốc repo, theo quy ước plans/<stt>-<YYYY-MM-DD>-<slug>.md và template có frontmatter, bắt buộc có thời gian ước lượng, ghi mốc bắt đầu/kết thúc từng task, và cập nhật trạng thái plan khi làm tiếp hoặc xong việc. Dùng khi người dùng nói \"viết execution plan\", \"lên kế hoạch rồi ghi vào plans\", \"ghi lại kế hoạch\", \"cập nhật trạng thái plan\", \"ghi nhận thời gian làm vào plan\", \"log công việc vừa làm\", \"viết nhật ký công việc\", \"lưu lại những gì vừa làm\", \"save work log\", \"record decision\", \"write execution plan\", hoặc khi một quy trình khác (VD Development Workflow Policy của nqdev-init-agents) yêu cầu viết plan trước khi code. Có thể chủ động đề xuất sau một chuỗi thay đổi đáng ghi, nhưng chỉ ghi file khi người dùng đồng ý. Không dùng khi người dùng chỉ muốn bàn kế hoạch trong chat, viết BRD/PRD (nqdev-brd-prd-writer) hay estimate (nqdev-requirement-estimator)."
 license: MIT
 compatibility: Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai
-version: '1.5.0'
+version: '1.6.1'
 author: QuyIT Platform
 created_date: '2026-11-17'
-updated_date: '2026-11-19'
+updated_date: '2026-11-20'
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash(git rev-parse:*), Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(mkdir:*)
 metadata:
   author: QuyIT Platform
-  version: "1.5.0"
+  version: "1.6.1"
   created_date: "2026-11-17"
-  updated_date: "2026-11-19"
+  updated_date: "2026-11-20"
   audience: developers
 ---
 
@@ -62,9 +62,9 @@ planning → in_progress → completed
 ```
 
 - **Bắt đầu làm:** `status: in_progress`. Cập nhật cột Trạng thái trong bảng *Tiến độ* (`chưa làm` / `đang làm` / `xong` / `bỏ`) sau mỗi bước, để plan luôn khớp tiến độ thật.
-- **Sau mỗi lần làm:** thêm một dòng vào *Nhật ký thời gian* và cộng dồn vào `time_spent_hours` (xem *Ghi nhận thời gian*).
+- **Mỗi lần làm một task:** ghi mốc Bắt đầu/Kết thúc và Delta vào bảng *Tiến độ*, rồi cập nhật hàng Tổng và `time_spent_hours` (xem *Ghi nhận thời gian*).
 - **Plan đổi đáng kể khi đang làm:** sửa mục Approach / Tiến độ và thêm một dòng vào *Nhật ký thay đổi plan* (ngày: đổi gì, vì sao). Nếu plan cần duyệt, xin duyệt lại.
-- **Xong hoặc tạm dừng:** thêm mục `## Kết quả` ngay trước *Nhật ký thời gian* (cấu trúc như mục 2–6 của Template Post), đổi `status`, ghi dòng thời gian của lần làm cuối và điền `completed_date` (khi `completed`).
+- **Xong hoặc tạm dừng:** thêm mục `## Kết quả` ngay trước *Nhật ký thay đổi plan* (hoặc cuối file nếu không có mục đó), cấu trúc như mục 2–6 của Template Post. Đổi `status`, ghi mốc Kết thúc của lần làm cuối và điền `completed_date` (khi `completed`).
 
 ## Frontmatter (chung cho cả hai chế độ)
 
@@ -79,7 +79,7 @@ impact: <low | medium | high>
 related_issues: []
 related_prs: []
 estimated_hours:      # Pre: bắt buộc, điền khi lập plan (VD 4, bước 0.5). Post: tuỳ chọn
-time_spent_hours: 0   # tổng thời gian thực tế, cộng dồn sau mỗi lần làm
+time_spent_hours: 0   # tổng thời gian thực tế = tổng cột Delta của bảng Tiến độ, đổi ra giờ và làm tròn 0.25
 completed_date:       # YYYY-MM-DD khi status = completed
 ---
 ```
@@ -88,23 +88,30 @@ Số giờ ghi dạng số (`4`, `1.5`), không dùng `~`. Trường không có 
 
 ## Ghi nhận thời gian
 
-- **Đơn vị:** giờ. **Thời gian thực tế** (`time_spent_hours`, bảng nhật ký) làm tròn đến 0.25 (15 phút); lần làm ngắn hơn vẫn ghi 0.25. **Ước lượng** (`estimated_hours`) làm tròn đến **0.5** (30 phút).
+- **Nguồn duy nhất:** bảng *Tiến độ*. Mỗi lần làm một task là một dòng có mốc `Bắt đầu` / `Kết thúc` (`YYYY-MM-DD HH:mm`, giờ địa phương) và `Delta (phút)` = Kết thúc − Bắt đầu, ghi số phút thô, **không làm tròn từng dòng**. Hàng **Tổng** cộng phút thô của mọi dòng, rồi đổi ra giờ ở cột Ghi chú; số giờ đó là `time_spent_hours`.
+- **Làm tròn chỉ ở Tổng:** tổng phút ÷ 60, làm tròn đến 0.25h gần nhất; tổng > 0 mà dưới 0.25 thì vẫn ghi 0.25. Làm tròn từng dòng sẽ cộng dồn sai số khi có nhiều lần làm ngắn. **Ước lượng** (`estimated_hours`) làm tròn đến **0.5** (30 phút).
+- **Task làm qua nhiều lần** (nhiều phiên, dừng chờ DEV review): mỗi lần thêm một dòng mới, giữ cùng `#`, cột Bước ghi "(tiếp)". Thời gian chờ nằm ngoài các cặp mốc nên không được tính. Delta của task = tổng Delta các dòng cùng `#`.
+- **Task `bỏ`:** giữ nguyên các dòng đã có Delta và vẫn tính vào Tổng, vì đó là thời gian thật đã bỏ ra.
 - **Ước lượng:** `estimated_hours` bắt buộc với plan Pre, điền khi lập plan. Nhật ký Post không có ước lượng trước thì để trống. Mô hình: **AI là người làm, DEV là người review và góp ý**; `estimated_hours` là tổng end-to-end (thời gian AI làm, DEV review và các vòng sửa theo góp ý) tới khi sẵn sàng merge. Baseline tham khảo: `nqdev-requirement-estimator` (`references/baselines.md`).
-- **Một lần làm** là một phiên có thực hiện ít nhất một task của plan (code, điều tra, test, sửa plan theo yêu cầu). Chỉ mở plan ra tra cứu thì không tính.
-- **Cuối mỗi lần làm** (trước khi báo xong bước hoặc kết thúc phiên):
-  1. Đề xuất số giờ của lần này từ các mốc có được: lúc bắt đầu và kết thúc phiên, thời điểm tin nhắn, thời điểm commit. Không có căn cứ thì hỏi thẳng.
-  2. Hỏi người dùng xác nhận hoặc sửa, VD: "Lần này khoảng 1.5h, ghi nhận vậy nhé?"
-  3. Thêm một dòng vào *Nhật ký thời gian* và đặt `time_spent_hours` bằng tổng cột Số giờ.
-  - Không có người để hỏi (VD phiên chạy theo lịch) → ghi số đề xuất, cột Ghi chú ghi "ước lượng, chưa xác nhận".
+- **Một lần làm** là một đoạn liên tục thực hiện một task của plan (code, điều tra, test, sửa plan theo yêu cầu). Chỉ mở plan ra tra cứu thì không tính.
+- **Bắt đầu một task:** ghi `Bắt đầu` theo giờ hiện tại (lấy từ lệnh `date`, thời điểm tin nhắn hoặc commit). Không có căn cứ thì hỏi thẳng.
+- **Kết thúc một lần làm** (xong task, dừng chờ review, hết phiên):
+  1. Ghi `Kết thúc` và tính Delta.
+  2. Hỏi người dùng xác nhận hoặc sửa, VD: "Bước 2: 14:00–15:30, 90 phút, ghi nhận vậy nhé?"
+  3. Cập nhật hàng Tổng (phút và giờ đã làm tròn) và đặt `time_spent_hours` bằng số giờ đó.
+  - Không có người để hỏi (VD phiên chạy theo lịch) → ghi mốc đề xuất, cột Ghi chú ghi "ước lượng, chưa xác nhận".
 - **Vượt ước lượng:** chỉ ghi nhận, không tự sửa `estimated_hours`. Người dùng muốn ước lượng lại → sửa `estimated_hours` và ghi một dòng vào *Nhật ký thay đổi plan* (cũ → mới, lý do).
-- **Plan cũ chưa có bảng:** thêm bảng khi cập nhật lần đầu. Nếu `time_spent_hours` đã có số, ghi một dòng "Trước khi có nhật ký thời gian" với số đó để tổng vẫn khớp; giá trị dạng `~X` đổi thành `X`.
+- **Plan cũ** (bảng Tiến độ chưa có cột thời gian, còn mục *Nhật ký thời gian* hoặc checklist Todo): khi cập nhật lần đầu, đổi sang bảng Tiến độ mới. Nếu `time_spent_hours` đã có số, thêm dòng `0 | Trước khi có mốc thời gian | xong | | | <số giờ cũ × 60>` để tổng vẫn khớp, rồi xoá mục *Nhật ký thời gian*. Giá trị dạng `~X` đổi thành `X`.
 
 ```markdown
-## Nhật ký thời gian
-| Ngày | Số giờ | Việc đã làm | Ghi chú |
-|---|---|---|---|
-| YYYY-MM-DD | 1.5 | <task/bước đã làm trong lần này> | |
-| **Tổng** | **1.5** | | Ước lượng: 4 |
+## 3. Tiến độ
+| # | Bước | Trạng thái | Bắt đầu | Kết thúc | Delta (phút) | Ghi chú |
+|---|---|---|---|---|---|---|
+| 1 | <bước 1> | xong | 2026-01-20 09:00 | 2026-01-20 10:30 | 90 | |
+| 2 | <bước 2> | xong | 2026-01-20 10:30 | 2026-01-20 10:40 | 10 | dừng chờ review |
+| 2 | (tiếp) | xong | 2026-01-21 14:00 | 2026-01-21 14:20 | 20 | sửa theo góp ý |
+| 3 | <bước 3> | chưa làm | | | | |
+| **Tổng** | | | | | **120** | = 2h · Ước lượng: 4 |
 ```
 
 ## Template Pre — kế hoạch trước khi làm
@@ -125,12 +132,13 @@ Số giờ ghi dạng số (`4`, `1.5`), không dùng `~`. Trường không có 
 Quyết định đã chốt với người dùng (VD "giữ nguyên X", "chọn Y"), để phiên sau không làm lại.>
 
 ## 3. Tiến độ
-| # | Bước | Trạng thái | Ghi chú |
-|---|---|---|---|
-| 1 | <bước 1> | chưa làm | |
-| 2 | <bước 2> | chưa làm | |
+| # | Bước | Trạng thái | Bắt đầu | Kết thúc | Delta (phút) | Ghi chú |
+|---|---|---|---|---|---|---|
+| 1 | <bước 1> | chưa làm | | | | |
+| 2 | <bước 2> | chưa làm | | | | |
+| **Tổng** | | | | | **0** | = 0h · Ước lượng: <estimated_hours> |
 
-Trạng thái: `chưa làm` / `đang làm` / `xong` / `bỏ` (bỏ thì ghi lý do ở cột Ghi chú).
+Trạng thái: `chưa làm` / `đang làm` / `xong` / `bỏ` (bỏ thì ghi lý do ở cột Ghi chú). Mốc và Delta: xem *Ghi nhận thời gian*.
 
 ## 4. Risks và Unknowns
 - **Risk:** <mô tả> → **Mitigation:** <cách xử lý>
@@ -141,11 +149,6 @@ Trạng thái: `chưa làm` / `đang làm` / `xong` / `bỏ` (bỏ thì ghi lý 
 
 ## 6. Câu hỏi / Phụ thuộc (Tùy chọn)
 <Cần input từ ai, phụ thuộc task nào, cần review trước khi làm không.>
-
-## Nhật ký thời gian
-| Ngày | Số giờ | Việc đã làm | Ghi chú |
-|---|---|---|---|
-| **Tổng** | **0** | | Ước lượng: <estimated_hours> |
 
 ## Nhật ký thay đổi plan (Tùy chọn)
 - YYYY-MM-DD: <đổi gì> — <vì sao>
@@ -187,16 +190,16 @@ Trạng thái: `chưa làm` / `đang làm` / `xong` / `bỏ` (bỏ thì ghi lý 
 ## 7. Tham khảo (Tùy chọn)
 <Issue, PR, tài liệu, thảo luận liên quan.>
 
-## Nhật ký thời gian
-| Ngày | Số giờ | Việc đã làm | Ghi chú |
-|---|---|---|---|
-| YYYY-MM-DD | <số giờ> | <việc đã làm> | |
-| **Tổng** | **<time_spent_hours>** | | |
+## Tiến độ
+| # | Bước | Trạng thái | Bắt đầu | Kết thúc | Delta (phút) | Ghi chú |
+|---|---|---|---|---|---|---|
+| 1 | <bước đã làm, khớp mục 2> | xong | YYYY-MM-DD HH:mm | YYYY-MM-DD HH:mm | <phút> | |
+| **Tổng** | | | | | **<tổng phút>** | = <time_spent_hours>h |
 ```
 
 **Quy tắc điền:**
 - Mục **bắt buộc** không có nội dung → giữ heading, ghi "Không có". Mục **(Tùy chọn)** không có nội dung → bỏ hẳn.
-- *Nhật ký thời gian* là mục bắt buộc ở cả hai template; hàng **Tổng** luôn bằng `time_spent_hours`.
+- Bảng *Tiến độ* có cột thời gian là mục bắt buộc ở cả hai template; hàng **Tổng** luôn bằng `time_spent_hours`.
 - Đường dẫn file luôn là markdown link tương đối tính từ file plan (`../src/...`).
 
 ## Khi nào ghi / đề xuất

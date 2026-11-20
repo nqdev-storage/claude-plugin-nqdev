@@ -2,7 +2,7 @@
 
 Viết **execution plan** (trước khi làm) hoặc **nhật ký công việc** (sau khi làm) thành file markdown trong `plans/` ở gốc repo, và giữ plan khớp tiến độ thật cho tới khi xong.
 
-- **Phiên bản:** 1.2.1 · **Tác giả:** QuyIT Platform · **License:** MIT
+- **Phiên bản:** 1.6.1 · **Tác giả:** QuyIT Platform · **License:** MIT
 - **Hỗ trợ:** Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai
 
 ## Dùng khi nào
@@ -40,13 +40,14 @@ Không dùng để bàn kế hoạch trong chat, viết BRD/PRD (`nqdev-brd-prd-
 ## Theo dõi thời gian
 
 - Plan Pre bắt buộc có `estimated_hours` khi lập: giờ, làm tròn 0.5, là tổng end-to-end của mô hình AI làm và DEV review (xem `nqdev-requirement-estimator`).
-- Sau mỗi lần làm task của plan, agent đề xuất số giờ (làm tròn 0.25h), người dùng xác nhận, rồi agent thêm một dòng vào **Nhật ký thời gian** và cộng dồn vào `time_spent_hours`.
+- Mỗi lần làm một task, agent ghi mốc **Bắt đầu / Kết thúc** (`YYYY-MM-DD HH:mm`) và **Delta** (số phút thô) vào bảng **Tiến độ**, người dùng xác nhận. Task làm qua nhiều lần thì mỗi lần một dòng, nên thời gian chờ review không được tính.
+- `time_spent_hours` = tổng Delta của mọi task (kể cả task `bỏ`), đổi ra giờ và làm tròn 0.25h. Chỉ làm tròn ở Tổng, không làm tròn từng dòng.
 - Vượt ước lượng thì chỉ ghi nhận; ước lượng lại phải do người dùng quyết định và được ghi vào Nhật ký thay đổi plan.
 
 ## Giới hạn
 
 - Chỉ ghi điều có thật trong phiên; không tự suy ra commit hash hay kết quả test.
-- Agent không có đồng hồ đo giờ làm: số giờ là đề xuất dựa trên mốc thời gian của phiên, cần người dùng xác nhận. Không ai xác nhận thì dòng đó được đánh dấu "ước lượng, chưa xác nhận".
+- Agent không có đồng hồ đo giờ làm: mốc thời gian lấy từ giờ hệ thống, thời điểm tin nhắn hoặc commit, cần người dùng xác nhận. Không ai xác nhận thì dòng đó được đánh dấu "ước lượng, chưa xác nhận".
 - Không tự commit file plan.
 - Skill vẫn để model tự kích hoạt (`disable-model-invocation` không bật) để có thể đề xuất ghi plan; việc ghi file luôn cần người dùng đồng ý hoặc quy trình yêu cầu.
 

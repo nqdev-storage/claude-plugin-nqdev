@@ -2,6 +2,22 @@
 
 Định dạng theo [Keep a Changelog](https://keepachangelog.com/), phiên bản theo Semantic Versioning.
 
+## [1.6.1] — 2026-11-20
+
+### Changed
+- Cột `Delta (h)` đổi thành `Delta (phút)`, ghi số phút thô, không làm tròn từng dòng. Chỉ hàng **Tổng** được đổi ra giờ và làm tròn 0.25h (tổng > 0 mà dưới 0.25 thì ghi 0.25), và số đó là `time_spent_hours`. Lý do: ở 1.6.0, mức tối thiểu 0.25h được áp cho từng dòng nên tổng bị đẩy lên khi có nhiều lần làm ngắn (4 dòng × 3 phút thành 1h).
+- `references/example-plan.md` và README cập nhật theo.
+
+## [1.6.0] — 2026-11-20
+
+### Changed
+- Bảng *Tiến độ* (template Pre và Post) thêm cột `Bắt đầu | Kết thúc | Delta (h)` và hàng **Tổng**. Mỗi lần làm một task là một dòng; task làm qua nhiều lần thì thêm dòng cùng `#` với Bước "(tiếp)", thời gian chờ giữa các lần không được tính. Task `bỏ` vẫn tính Delta đã làm vào Tổng.
+- `time_spent_hours` = hàng Tổng (tổng cột Delta) của bảng Tiến độ. Mốc ghi theo dạng `YYYY-MM-DD HH:mm`, Delta làm tròn 0.25h.
+- Mục "Ghi nhận thời gian", "Vòng đời một plan" và quy tắc chuyển đổi plan cũ cập nhật theo; `references/example-plan.md` minh hoạ một task làm qua 2 lần và một task `bỏ`.
+
+### Removed
+- Mục *Nhật ký thời gian* (ghi theo phiên) ở cả hai template. Plan cũ được chuyển đổi khi cập nhật lần đầu: số giờ cũ được ghi thành dòng `0 | Trước khi có mốc thời gian`.
+
 ## [1.5.0] — 2026-11-19
 
 ### Changed

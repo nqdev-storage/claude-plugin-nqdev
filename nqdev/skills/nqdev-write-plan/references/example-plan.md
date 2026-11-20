@@ -40,13 +40,15 @@ Log tuần trước có nhiều đợt thử mật khẩu hàng loạt vào `POS
 
 ## 3. Tiến độ
 
-| # | Bước | Trạng thái | Ghi chú |
-|---|---|---|---|
-| 1 | Middleware đếm số lần thử bằng Redis | xong | |
-| 2 | Gắn vào `POST /auth/login`, trả `429` + `Retry-After` | xong | |
-| 3 | Đưa ngưỡng và cửa sổ thời gian vào config | đang làm | |
-| 4 | Test: vượt ngưỡng, hết cửa sổ, Redis mất kết nối | chưa làm | |
-| 5 | Ghi log khi chặn | bỏ | Đã có log chung ở middleware lỗi, không cần thêm |
+| # | Bước | Trạng thái | Bắt đầu | Kết thúc | Delta (phút) | Ghi chú |
+|---|---|---|---|---|---|---|
+| 1 | Middleware đếm số lần thử bằng Redis | xong | 2026-01-20 09:00 | 2026-01-20 10:00 | 60 | |
+| 2 | Gắn vào `POST /auth/login`, trả `429` + `Retry-After` | xong | 2026-01-20 10:00 | 2026-01-20 10:30 | 30 | |
+| 3 | Đưa ngưỡng và cửa sổ thời gian vào config | đang làm | 2026-01-21 09:00 | 2026-01-21 09:30 | 30 | dừng chờ DEV chốt tên key config |
+| 3 | (tiếp) | đang làm | 2026-01-21 14:00 | | | đang làm, chưa có mốc kết thúc |
+| 4 | Test: vượt ngưỡng, hết cửa sổ, Redis mất kết nối | chưa làm | | | | |
+| 5 | Ghi log khi chặn | bỏ | 2026-01-21 09:30 | 2026-01-21 10:00 | 30 | Đã có log chung ở middleware lỗi, không cần thêm |
+| **Tổng** | | | | | **150** | = 2.5h · Ước lượng: 6 |
 
 ## 4. Risks và Unknowns
 
@@ -58,14 +60,6 @@ Log tuần trước có nhiều đợt thử mật khẩu hàng loạt vào `POS
 - Lần thử thứ 6 trong 15 phút trả `429` có `Retry-After`; hết cửa sổ thì đăng nhập lại được.
 - Redis lỗi thì đăng nhập vẫn hoạt động.
 - Test của bước 4 pass trên CI.
-
-## Nhật ký thời gian
-
-| Ngày | Số giờ | Việc đã làm | Ghi chú |
-|---|---|---|---|
-| 2026-01-20 | 1.5 | Bước 1–2: middleware Redis, gắn vào API đăng nhập | |
-| 2026-01-21 | 1 | Bước 3 (dở), bỏ bước 5 | |
-| **Tổng** | **2.5** | | Ước lượng: 6 |
 
 ## Nhật ký thay đổi plan
 
@@ -87,7 +81,7 @@ impact: high
 related_issues: []
 related_prs: []
 estimated_hours:
-time_spent_hours: 3
+time_spent_hours: 2.75
 completed_date:
 ---
 
@@ -123,13 +117,13 @@ Hai script deploy được copy từ nhau rồi sửa tay nên lệch nhau: stag
 - [ ] Chạy thử deploy production trong cửa sổ bảo trì tiếp theo.
 - [ ] Cân nhắc gửi thông báo (Slack/email) khi rollback tự động kích hoạt; hiện chỉ log ra console.
 
-## Nhật ký thời gian
+## Tiến độ
 
-| Ngày | Số giờ | Việc đã làm | Ghi chú |
-|---|---|---|---|
-| 2026-01-15 | 1.75 | Bước 1–2: so sánh 2 script, thêm health-check và rollback | |
-| 2026-01-15 | 1.25 | Bước 3: tách `deploy-common.sh`, chạy thử staging | |
-| **Tổng** | **3** | | Không có ước lượng (nhật ký Post) |
+| # | Bước | Trạng thái | Bắt đầu | Kết thúc | Delta (phút) | Ghi chú |
+|---|---|---|---|---|---|---|
+| 1 | So sánh 2 script, thêm health-check và rollback | xong | 2026-01-15 09:00 | 2026-01-15 10:40 | 100 | |
+| 2 | Tách `deploy-common.sh`, chạy thử staging | xong | 2026-01-15 13:30 | 2026-01-15 14:40 | 70 | |
+| **Tổng** | | | | | **170** | = 2.75h (170 ÷ 60 = 2.83, làm tròn 0.25) · Không có ước lượng (nhật ký Post) |
 ```
 
 ---
@@ -138,13 +132,14 @@ Hai script deploy được copy từ nhau rồi sửa tay nên lệch nhau: stag
 
 **Chung**
 - Frontmatter đủ mọi trường; trường chưa có giá trị để trống, không xoá. Cả hai `status: in_progress` nên `completed_date` trống.
-- Hàng Tổng của Nhật ký thời gian bằng `time_spent_hours`; thời gian thực tế làm tròn 0.25.
+- Delta ghi phút thô; chỉ hàng Tổng được đổi ra giờ và làm tròn 0.25, và số đó bằng `time_spent_hours`. Khoảng nghỉ giữa các mốc (nghỉ trưa, chờ review) không được tính.
 - Mục **(Tùy chọn)** không có nội dung thì bỏ hẳn (ví dụ 1 bỏ mục 6, ví dụ 2 bỏ mục 6–7).
 
 **Ví dụ 1 (Pre)**
 - H1 `# Kế hoạch:`; `estimated_hours: 6` làm tròn 0.5, là tổng end-to-end theo mô hình AI làm, DEV review; hàng Tổng ghi "Ước lượng: 6".
 - Mục 2 tách rõ phương án đã loại và **quyết định đã chốt với người dùng**, để phiên sau không đề xuất lại việc khoá tài khoản.
-- Bảng Tiến độ dùng đủ 4 trạng thái; bước `bỏ` có lý do, và có dòng tương ứng trong Nhật ký thay đổi plan.
+- Bảng Tiến độ dùng đủ 4 trạng thái; bước `bỏ` có lý do, có dòng tương ứng trong Nhật ký thay đổi plan, và 30 phút đã làm vẫn tính vào Tổng.
+- Bước 3 làm qua 2 lần: dòng thứ hai cùng `#`, cột Bước ghi "(tiếp)". Dòng đang làm chưa có mốc kết thúc nên chưa có Delta; thời gian chờ DEV từ 09:30 đến 14:00 không được tính.
 
 **Ví dụ 2 (Post)**
 - H1 `# Nhật ký:`; `estimated_hours` trống vì việc đã làm xong mới ghi.
