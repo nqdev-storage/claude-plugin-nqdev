@@ -49,7 +49,7 @@ Hoặc gõ trực tiếp trong phiên Claude Code:
 
 Sau khi cài, chạy `/reload-plugins` để áp dụng ngay trong phiên đang mở (hoặc khởi động lại Claude Code).
 
-> **Branch `dist` của repo này chứa gì?** CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) tự đồng bộ nó từ repo phát triển mỗi khi có push, chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
+> **Branch `dist` của repo này chứa gì?** CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) cập nhật nó từ repo phát triển mỗi khi có tag phát hành `vX.Y.Z` (cùng tag đó ở repo này, dùng được với `#vX.Y.Z`), chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
 >
 > Đã cài theo lệnh cũ (không có `#dist`, hoặc `#main`): chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh ở Bước 1. Plugin đã cài vẫn giữ tên `<plugin>@nqdev-marketplace`.
 

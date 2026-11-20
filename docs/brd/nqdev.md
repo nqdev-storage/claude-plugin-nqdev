@@ -252,4 +252,5 @@ Plugin không thay thế một hệ thống khác. Phần dưới đây đối c
 - 2026-11-20 — UC cài plugin và AC-NQDEV-001 dùng `nqdev-storage/claude-plugin-nqdev#dist` (branch phát hành do `publish-dist.yml` đồng bộ từ `main`). Không đổi BR nào.
 - 2026-11-20 — Đổi lệnh cài sang `nqdev-storage/claude-plugin-nqdev#dist`: `publish-dist.yml` đẩy bản phát hành vào `main` của repo public. Không đổi BR nào.
 - 2026-11-20 — Đổi lại lệnh cài về `nqdev-storage/claude-plugin-nqdev#dist`: `publish-dist.yml` phát hành vào `dist` của repo public. Không đổi BR nào.
+- 2026-11-20 — `dist` chỉ cập nhật khi có tag phát hành `vX.Y.Z` (không còn theo mỗi push `main`). Không đổi BR nào.
 - 2026-11-20 — Làm gọn: bỏ số dòng trong mọi tham chiếu nguồn (đã lệch so với tài liệu hiện tại), chỉ giữ tên file. Không đổi BR/AC/UC nào.
