@@ -1,6 +1,6 @@
 # Thông tin submit plugin `nqdev` lên Claude Plugin Directory
 
-> Soạn: 2026-11-20 · Plugin `nqdev` v2.5.0 · Form: https://claude.ai/directory/manage/new/plugin
+> Soạn: 2026-11-20 · Plugin `nqdev` v2.6.0 · Form: https://claude.ai/directory/manage/new/plugin
 > Các trường dưới đây đoán theo form tại thời điểm soạn (trang cần đăng nhập, chưa xem trực tiếp), cần đối chiếu form thật. Các bước, điều kiện và cách xử lý sau khi nộp: [Hướng dẫn nộp plugin](huong-dan-nop-plugin.md).
 
 Theo [hướng dẫn nộp plugin](huong-dan-nop-plugin.md) (mục 3.4), phần **Listing details** của portal là chỉ đọc, lấy từ `nqdev/.claude-plugin/plugin.json` và `nqdev/README.md`. Muốn đổi nội dung listing thì sửa hai file đó rồi validate lại; mục 2 bên dưới dùng để đối chiếu, không phải gõ tay.
@@ -20,7 +20,7 @@ Theo [hướng dẫn nộp plugin](huong-dan-nop-plugin.md) (mục 3.4), phần 
 |---|---|
 | Name | `nqdev` (không đổi được sau khi publish) |
 | Display name | NQDev Toolkit |
-| Version | 2.5.0 |
+| Version | 2.6.0 |
 | Author | Nguyễn Quý |
 | License | Apache-2.0 |
 | Repository / Homepage | https://github.com/nqdev-storage/claude-plugin-nqdev |
@@ -137,7 +137,7 @@ Kiểm tra ngày 2026-11-20:
 - [x] Icon PNG vuông 1024×1024, 185 KB (yêu cầu 512–2048 px, dưới 2 MB)
 - [x] Branch `dist` ở repo public có `nqdev/.claude-plugin/plugin.json` version 2.5.0, đủ 4 URL
 - [ ] ❌ 4 URL directory đều trả **HTTP 404**: documentation, support, privacy-policy, terms-of-service trên `blogs.nhquydev.net`. Phải publish đủ 4 trang trước khi nộp
-- [ ] ❌ Tag `v2.5.1` đã có ở repo public nhưng `plugin.json` vẫn là `2.5.0`. Nên tăng `version` cho khớp tag ở lần phát hành tới, vì directory nhận bản mới theo `version`
+- [ ] `plugin.json` đã lên `2.6.0` (lớn hơn tag `v2.5.1` đang có ở repo public); cần đẩy tag `v2.6.0` để `dist` có bản mới trước khi nộp
 - [ ] `description` trong `plugin.json` chỉ có tiếng Việt. Quyết định có thêm tiếng Anh không (xem mục 2)
 - [ ] Email liên hệ (mục 4)
 - [ ] Đối chiếu các trường trong file này với form thật trên portal
