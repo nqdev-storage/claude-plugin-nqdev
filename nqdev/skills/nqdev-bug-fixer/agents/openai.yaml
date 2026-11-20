@@ -1,0 +1,3 @@
+# Codex CLI: chỉ chạy khi người dùng gọi rõ $nqdev-bug-fixer (skill sửa code trong repo)
+policy:
+  allow_implicit_invocation: false

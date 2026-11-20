@@ -1,0 +1,14 @@
+{
+  "name": "vhs",
+  "displayName": "ViHAT Toolkit",
+  "version": "1.0.0",
+  "description": "Bộ skill của ViHAT: tinh chỉnh prompt thô theo lĩnh vực (code, debug, review, kiến trúc, tài liệu...) với context lấy từ workspace, và viết tài liệu hướng dẫn sử dụng cho người dùng cuối từ source code.",
+  "author": {
+    "name": "ViHAT"
+  },
+  "homepage": "https://github.com/nqdev-storage/claude-plugin-nqdev",
+  "repository": "https://github.com/nqdev-storage/claude-plugin-nqdev",
+  "license": "MIT",
+  "keywords": ["vhs", "vihat", "skills", "prompt", "user-guide", "documentation", "vietnamese"],
+  "icon": "./.claude-plugin/icon.png"
+}

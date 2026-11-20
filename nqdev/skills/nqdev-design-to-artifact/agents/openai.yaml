@@ -1,0 +1,3 @@
+# Codex CLI: chỉ chạy khi người dùng gọi rõ $nqdev-design-to-artifact (skill ghi file và publish lên canvas)
+policy:
+  allow_implicit_invocation: false

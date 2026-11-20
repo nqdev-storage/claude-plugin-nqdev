@@ -1,0 +1,311 @@
+{
+  "name": "nqdev-init-agents",
+  "version": "1.8.0",
+  "displayName": "nqdev-init-agents",
+  "description": "Automated AI Agent Guidance Infrastructure - Initialize CLAUDE.md files, business documentation, agent rules, project-specific rules (.claude/rules/), runtime configuration (.rtk/), OpenCode configuration (.opencode/), and shared permissions settings (.claude/settings.share.json) with explicit CLI control and project guidance in software projects with optional hierarchical scope-specific support",
+  "author": "QuyIT Platform",
+  "license": "MIT",
+  "created_date": "2026-08-10",
+  "updated_date": "2026-11-20",
+  "status": "Production Ready",
+  "category": "Project Setup",
+  "tags": [
+    "claude",
+    "ai-guidance",
+    "project-initialization",
+    "automation",
+    "standards",
+    "documentation"
+  ],
+  "features": [
+    "Automatic project analysis",
+    "Tech stack detection (7 frameworks)",
+    "Root CLAUDE.md generation",
+    "Hierarchical CLAUDE.md (optional)",
+    "Scope resolution algorithm",
+    "Business-Document.md in ./docs",
+    ".claude/rules/ directory creation (v1.4.4)",
+    "code-rules.md: testing, comment, database, git, workflow, and task execution rules",
+    "Testing rules with phone number restrictions",
+    "Comment Rule: 5 concise rules (SIMPLIFIED v1.4.13, short-comment rule v1.6.1)",
+    "Database Execution Policy: 'NOT run by Claude — cần DBA review' (NEW v1.4.12)",
+    ".rtk/ runtime configuration directory (v1.4.5)",
+    ".rtk-usage.md documentation (v1.4.5)",
+    "Explicit --rtk CLI flag for runtime configuration (v1.4.7)",
+    "Auto-detection of .rtk/ setup need (v1.4.7)",
+    ".claude/settings.share.json for permissions & configuration (v1.4.10)",
+    "permissions.allow array configuration (v1.4.9)",
+    ".opencode/ configuration via --opencode flag (v1.4.11)",
+    "agents.md routing guide",
+    ".claudeignore generation",
+    "draft/ and draft/docs/ scratch directories with .gitkeep and matching .gitignore block (v1.8.0)",
+    ".claude/.gitignore auto-generation",
+    ".rtk/.gitignore auto-generation",
+    "CLI customization flags",
+    "Mandatory code-rules.md (DB / Git / Workflow / Task Execution policies)",
+    "Progressive disclosure: references/ loaded on demand"
+  ],
+  "techStack": [
+    "Node.js",
+    "Python",
+    "Java/Spring Boot",
+    "PHP/Laravel",
+    ".NET/C#",
+    "Go",
+    "Ruby"
+  ],
+  "commands": [
+    {
+      "name": "/nqdev-init-agents",
+      "description": "Initialize root CLAUDE.md only (default)",
+      "example": "/nqdev-init-agents"
+    },
+    {
+      "name": "/nqdev-init-agents --rtk",
+      "description": "Enable explicit .rtk/ directory setup",
+      "example": "/nqdev-init-agents --rtk"
+    },
+    {
+      "name": "/nqdev-init-agents --no-rtk",
+      "description": "Disable .rtk/ directory setup",
+      "example": "/nqdev-init-agents --no-rtk"
+    },
+    {
+      "name": "/nqdev-init-agents --sub-claude",
+      "description": "Initialize with hierarchical CLAUDE.md",
+      "example": "/nqdev-init-agents --sub-claude"
+    },
+    {
+      "name": "/nqdev-init-agents --sub-claude --rtk",
+      "description": "Hierarchical CLAUDE.md with .rtk/ setup",
+      "example": "/nqdev-init-agents --sub-claude --rtk"
+    },
+    {
+      "name": "/nqdev-init-agents --sub-claude --claude-depth=3",
+      "description": "Initialize with custom hierarchy depth",
+      "example": "/nqdev-init-agents --sub-claude --claude-depth=3"
+    },
+    {
+      "name": "/nqdev-init-agents --sub-claude --claude-depth=3 --rtk",
+      "description": "Enterprise scale with .rtk/ setup",
+      "example": "/nqdev-init-agents --sub-claude --claude-depth=3 --rtk"
+    },
+    {
+      "name": "/nqdev-init-agents --opencode",
+      "description": "Enable OpenCode configuration setup (NEW v1.4.11)",
+      "example": "/nqdev-init-agents --opencode"
+    },
+    {
+      "name": "/nqdev-init-agents --opencode --sub-claude --rtk",
+      "description": "Full stack: OpenCode + hierarchical + runtime config",
+      "example": "/nqdev-init-agents --opencode --sub-claude --rtk"
+    }
+  ],
+  "requirements": {
+    "minVersion": "1.0.0",
+    "platform": [
+      "Web",
+      "Desktop",
+      "CLI"
+    ]
+  },
+  "changelog": {
+    "v1.8.0": {
+      "date": "2026-11-20",
+      "features": [
+        "draft/ and draft/docs/ scratch directories with .gitkeep (no overwrite)",
+        "draft/* ignore block appended to the target .gitignore if missing"
+      ],
+      "improvements": [
+        "Root CLAUDE.md notes draft/ as untracked scratch space",
+        "Full history: see CHANGELOG.md"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.13": {
+      "date": "2026-09-28",
+      "features": [
+        "Comment Rule simplified to 4 concise rules (was ~250 lines)"
+      ],
+      "improvements": [
+        "Removed philosophy/decision-matrix/per-language examples/checklists",
+        "Kept original intent: WHY not WHAT, only non-obvious logic, cleanup on update",
+        "Faster to read and apply during code review"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.12": {
+      "date": "2026-09-27",
+      "features": [
+        "Database Execution Policy rule: 'NOT run by Claude — cần DBA review' (NEW)",
+        "Applies to all DDL/DML statements and schema migrations",
+        "Read-only SELECT diagnostics exempt"
+      ],
+      "improvements": [
+        "Prevents AI agents from executing SQL directly against any database",
+        "Keeps a human DBA as executor of record",
+        "Documented in root CLAUDE.md under 'Database Safety'"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.11": {
+      "date": "2026-09-27",
+      "features": [
+        "Generic OpenCode configuration via --opencode flag (NEW)",
+        ".opencode/opencode.jsonc generation with schema reference",
+        ".env template generation",
+        ".opencode/.gitignore auto-generation",
+        "Auto-populate MCP section from .mcp.json if present"
+      ],
+      "improvements": [
+        "Secure .env handling (removes !.env force-include lines)",
+        "Auto-detect environment type from project structure",
+        "Full integration with Claude configuration"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.10": {
+      "date": "2026-09-25",
+      "features": [
+        "Settings file renamed: settings.local.json → settings.share.json",
+        "Clearer naming convention for shared configuration",
+        "Updated .gitignore patterns for *.share.json",
+        "Enhanced STEP 6d documentation"
+      ],
+      "improvements": [
+        "Better semantic naming: share = shared configuration",
+        "Clearer intent for file usage across team",
+        "Improved consistency in naming conventions",
+        "Updated documentation throughout"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.9": {
+      "date": "2026-09-24",
+      "features": [
+        "Claude Settings & Permissions configuration support (NEW)",
+        ".claude/settings.local.json auto-generation (NEW)",
+        "permissions.allow array configuration (NEW)",
+        "Per-project permission rules for Claude access",
+        "Integrated with .claude/.gitignore for security"
+      ],
+      "improvements": [
+        "Fine-grained access control per project",
+        "Centralized permissions management",
+        "Enhanced security with local settings",
+        "Better control over Claude agent capabilities",
+        "Clear documentation in CLAUDE.md"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.8": {
+      "date": "2026-09-21",
+      "features": [
+        "Consolidated code-rules.md: Testing + Comment guidelines",
+        "Testing rules with phone number restrictions (0909090909, 0765418062)",
+        "Comment Cleanup Rule for code quality (later simplified in v1.4.13)",
+        "Unified code quality guidelines"
+      ],
+      "improvements": [
+        "Consolidated separate rule files into single code-rules.md",
+        "Single source of truth for code guidelines"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.7": {
+      "date": "2026-08-28",
+      "features": [
+        "Explicit --rtk CLI flag for runtime configuration (NEW)",
+        "Explicit --no-rtk CLI flag to disable .rtk/ setup (NEW)",
+        "Auto-detection of .rtk/ setup need based on project type (NEW)",
+        "Enhanced STEP 6c with 5 detailed sub-steps"
+      ],
+      "improvements": [
+        "CLI flags for granular .rtk/ setup control",
+        "Better discovery of RTK setup feature",
+        "Comprehensive .rtk/ workflow documentation",
+        "CLI examples showing all --rtk combinations"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.5": {
+      "date": "2026-08-20",
+      "features": [
+        ".rtk/ directory for runtime configuration (NEW)",
+        ".rtk/.gitignore with 50+ patterns (NEW)",
+        ".rtk-usage.md comprehensive documentation (NEW)"
+      ],
+      "improvements": [
+        "Clear separation: source vs runtime",
+        "Better repository hygiene",
+        "Local configs (.env.local) safely stored"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.4": {
+      "date": "2026-08-20",
+      "features": [
+        ".claude/rules/ directory creation (NEW)",
+        "testing-rules.md with comprehensive testing guidelines (NEW)",
+        "Centralized phone number testing restrictions (0909090909, 0765418062)"
+      ],
+      "improvements": [
+        "Separation of concerns: routing vs rules",
+        "Better discoverability of project rules"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.4.0": {
+      "date": "2026-08-10",
+      "features": [
+        "Hierarchical CLAUDE.md files (optional)",
+        "Scope resolution algorithm",
+        "--hierarchical-claude flag",
+        "--sub-claude shorthand flag",
+        "--claude-depth customization",
+        "--claude-dirs specification"
+      ],
+      "improvements": [
+        "100% backward compatibility with v1.3.0",
+        "Enhanced documentation (SPECS + PRD)"
+      ],
+      "status": "Production Ready"
+    },
+    "v1.3.0": {
+      "date": "2026-07-28",
+      "features": [
+        "Root CLAUDE.md generation",
+        ".claudeignore support",
+        "Optional .claude/ configuration"
+      ]
+    }
+  },
+  "files": {
+    "documentation": [
+      "SKILL.md",
+      "README.md",
+      "docs/SPECS.md",
+      "docs/PRD.md",
+      "docs/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "templates": [
+      "templates/README.md",
+      "templates/agents.md",
+      "templates/Business-Document.md",
+      "templates/code-rules.md"
+    ]
+  },
+  "successMetrics": {
+    "setupTime": "< 2 minutes",
+    "frameworkCoverage": "95% of common stacks",
+    "backwardCompatibility": "100% with v1.3.0",
+    "errorRate": "< 1%"
+  },
+  "relatedSkills": [
+    "nqdev-requirement-estimator",
+    "nqdev-write-plan"
+  ],
+  "supportLevel": "Production",
+  "repository": "https://github.com/nqdev/nqdev-init-agents"
+}

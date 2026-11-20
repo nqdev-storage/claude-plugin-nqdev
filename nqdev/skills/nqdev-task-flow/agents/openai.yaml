@@ -1,0 +1,3 @@
+# Codex CLI: cho phép tự kích hoạt; skill luôn hỏi trước (bước 0) và không tự sửa code
+policy:
+  allow_implicit_invocation: true

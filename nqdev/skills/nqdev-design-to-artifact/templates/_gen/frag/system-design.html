@@ -1,0 +1,544 @@
+<!--title: System Design-->
+<!--
+  Màn System Design (slug "system-design"): tài liệu quy chuẩn UI, nơi kiểm thử component và bàn giao kỹ thuật.
+  Bắt buộc có trong mọi bộ prototype. Token và class lấy từ _gen/frame.html: màn này chỉ hiển thị lại,
+  mã hex và thông số chữ được đọc bằng getComputedStyle nên luôn khớp token thật (đổi token ở frame.html, dựng lại).
+  Nút Xem/Sửa/Xóa trong bảng, "Mở hộp thoại", "Hiện thông báo", "Thử lại" có hành vi trong actions.py (khóa "system-design").
+  Nút chỉ minh họa trạng thái dùng data-proto="skip". Tab, menu thả xuống, xóa tag, nút "đang tải" chạy bằng script cuối file.
+  Đồng bộ nội dung ra docs/specs/ui-ux.md mỗi khi đổi token.
+-->
+<style>
+  .sd { max-width: var(--container); margin: 0 auto; }
+  .sd > section { margin-top: var(--space-7); }
+  .sd h2 { margin: 0 0 var(--space-1); }
+  .sd h3 { margin: var(--space-5) 0 var(--space-3); }
+  .sd .grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .sd .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .sd .stack { display: grid; gap: var(--space-3); }
+  .sd .two { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .sd .swatch { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+  .sd .swatch i { display: block; height: 56px; }
+  .sd .swatch div { padding: var(--space-2) var(--space-3); }
+  .sd .swatch b { display: block; font-size: 13px; font-weight: 600; }
+  .sd code, .sd .mono { font-family: var(--font-mono); font-size: 12px; color: var(--text-2); white-space: nowrap; }
+  .sd .tile { height: 72px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--line); display: grid; place-items: center; font-size: 12px; color: var(--text-2); }
+  .sd .label { font-size: 12px; color: var(--text-2); min-width: 72px; }
+  .sd .scroll { overflow-x: auto; }
+  .sd table.spec { width: 100%; border-collapse: collapse; }
+  .sd table.spec th, .sd table.spec td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .sd table.spec th { font-size: 12px; color: var(--text-2); font-weight: 600; }
+  .sd .icons { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .sd .icons div { display: grid; justify-items: center; gap: var(--space-1); padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface); font-size: 12px; color: var(--text-2); }
+  .sd svg.ic { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; color: var(--text); }
+  .sd .avatar { position: relative; display: inline-grid; place-items: center; border-radius: var(--radius-full); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .sd .avatar.sq { border-radius: var(--radius-md); }
+  .sd .avatar .dot { position: absolute; right: 0; bottom: 0; width: 28%; height: 28%; min-width: 8px; min-height: 8px; border-radius: var(--radius-full); border: 2px solid var(--surface); }
+  .sd .tabs { display: flex; gap: var(--space-1); border-bottom: 1px solid var(--line); }
+  .sd .tabs button { border: 0; background: none; padding: var(--space-2) var(--space-3); font: 500 14px/20px var(--font-sans); color: var(--text-2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .sd .tabs button[aria-selected="true"] { color: var(--primary); border-bottom-color: var(--primary); }
+  .sd .pills { display: inline-flex; gap: var(--space-1); padding: var(--space-1); background: var(--secondary-soft); border-radius: var(--radius-full); }
+  .sd .pills button { border: 0; background: none; padding: 6px var(--space-3); border-radius: var(--radius-full); font: 500 13px/1 var(--font-sans); color: var(--text-2); cursor: pointer; }
+  .sd .pills button[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+  .sd .crumbs { display: flex; gap: var(--space-2); font-size: 13px; color: var(--text-2); flex-wrap: wrap; }
+  .sd .crumbs a { color: var(--primary); text-decoration: none; }
+  .sd .pager { display: flex; gap: var(--space-1); }
+  .sd .pager button { min-width: 32px; height: 32px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-md); cursor: pointer; color: var(--text); }
+  .sd .pager button[aria-current="page"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+  .sd .tip { position: relative; display: inline-block; }
+  .sd .tip span[role="tooltip"] { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--text); color: var(--surface); font-size: 12px; padding: 4px 8px; border-radius: var(--radius-sm); opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-out); }
+  .sd .tip:hover span[role="tooltip"], .sd .tip:focus-within span[role="tooltip"] { opacity: 1; }
+  .sd .menu { position: relative; display: inline-block; }
+  .sd .menu ul { position: absolute; top: calc(100% + 4px); left: 0; min-width: 180px; margin: 0; padding: var(--space-1); list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 5; }
+  .sd .menu li a { display: block; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); color: var(--text); text-decoration: none; }
+  .sd .menu li a:hover { background: var(--primary-soft); }
+  .sd .menu li a.danger { color: var(--danger); }
+  .sd .state { text-align: center; padding: var(--space-6) var(--space-4); }
+  .sd .state svg { width: 40px; height: 40px; color: var(--muted); }
+  .sd .bar { height: 12px; background: var(--primary); border-radius: var(--radius-sm); }
+  .sd .motion { width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--primary); transition-property: transform; }
+  .sd .motion-track { width: 100%; min-width: 96px; max-width: 200px; padding: var(--space-2); border: 1px dashed var(--line); border-radius: var(--radius-md); }
+  .sd .motion-track:hover .motion { transform: translateX(48px); }
+  .sd .two > *, .sd .card { min-width: 0; }
+</style>
+
+<div class="sd">
+  <h1 class="t-h1">System Design</h1>
+  <p class="t-subtitle">Design tokens và component cơ bản của bộ prototype</p>
+
+  <!-- 1. Màu, elevation, bo góc -->
+  <section>
+    <h2 class="t-h2">Màu và design token</h2>
+
+    <h3 class="t-h5">Brand</h3>
+    <div class="grid">
+      <div class="swatch" data-token="--primary"><i></i><div><b>Primary</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--primary-hover"><i></i><div><b>Primary hover</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--primary-active"><i></i><div><b>Primary active</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--primary-soft"><i></i><div><b>Primary nền nhạt</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--secondary"><i></i><div><b>Secondary</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--secondary-hover"><i></i><div><b>Secondary hover</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--secondary-active"><i></i><div><b>Secondary active</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--secondary-soft"><i></i><div><b>Secondary nền nhạt</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--brand-accent"><i></i><div><b>Accent</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--brand-accent-hover"><i></i><div><b>Accent hover</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--brand-accent-active"><i></i><div><b>Accent active</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--brand-accent-soft"><i></i><div><b>Accent nền nhạt</b><code data-hex></code></div></div>
+    </div>
+
+    <h3 class="t-h5">Neutrals</h3>
+    <div class="grid">
+      <div class="swatch" data-token="--bg"><i></i><div><b>Nền trang</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--surface"><i></i><div><b>Card / surface</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--line"><i></i><div><b>Border</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--text"><i></i><div><b>Text primary</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--text-2"><i></i><div><b>Text secondary</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--muted"><i></i><div><b>Muted</b><code data-hex></code></div></div>
+    </div>
+
+    <h3 class="t-h5">Semantic</h3>
+    <div class="grid">
+      <div class="swatch" data-token="--success"><i></i><div><b>Success</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--warning"><i></i><div><b>Warning</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--danger"><i></i><div><b>Danger</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--info"><i></i><div><b>Info</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--success-soft"><i></i><div><b>Success nền</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--warning-soft"><i></i><div><b>Warning nền</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--danger-soft"><i></i><div><b>Danger nền</b><code data-hex></code></div></div>
+      <div class="swatch" data-token="--info-soft"><i></i><div><b>Info nền</b><code data-hex></code></div></div>
+    </div>
+
+    <h3 class="t-h5">Elevation</h3>
+    <div class="grid">
+      <div class="tile" style="box-shadow:var(--shadow-sm)">shadow-sm</div>
+      <div class="tile" style="box-shadow:var(--shadow-md)">shadow-md</div>
+      <div class="tile" style="box-shadow:var(--shadow-lg)">shadow-lg</div>
+      <div class="tile" style="box-shadow:var(--shadow-xl)">shadow-xl</div>
+    </div>
+
+    <h3 class="t-h5">Border radius</h3>
+    <div class="grid">
+      <div class="tile" style="border-radius:var(--radius-none)">none · <span data-var="--radius-none"></span></div>
+      <div class="tile" style="border-radius:var(--radius-sm)">sm · <span data-var="--radius-sm"></span></div>
+      <div class="tile" style="border-radius:var(--radius-md)">md · <span data-var="--radius-md"></span></div>
+      <div class="tile" style="border-radius:var(--radius-lg)">lg · <span data-var="--radius-lg"></span></div>
+      <div class="tile" style="border-radius:var(--radius-xl)">xl · <span data-var="--radius-xl"></span></div>
+      <div class="tile" style="border-radius:var(--radius-full)">full</div>
+    </div>
+  </section>
+
+  <!-- 2. Typography: thông số đọc từ class .t-* trong frame.html -->
+  <section>
+    <h2 class="t-h2">Typography</h2>
+    <p class="t-caption">Font: <span class="mono" data-var="--font-sans"></span></p>
+    <div class="card scroll">
+      <table class="spec">
+        <thead><tr><th>Cấp</th><th>Mẫu</th><th>Size / Line / Weight</th></tr></thead>
+        <tbody>
+          <tr><td>Display</td><td><div class="t-display" data-type>Đơn hàng</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H1</td><td><div class="t-h1" data-type>Quản lý đơn hàng</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H2</td><td><div class="t-h2" data-type>Đơn hàng tháng 10</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H3</td><td><div class="t-h3" data-type>Thông tin giao hàng</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H4</td><td><div class="t-h4" data-type>Người nhận</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H5</td><td><div class="t-h5" data-type>Địa chỉ</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>H6</td><td><div class="t-h6" data-type>Ghi chú</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Subtitle</td><td><div class="t-subtitle" data-type>Cập nhật lúc 09:30, 28/10/2026</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Body Large</td><td><div class="t-body-lg" data-type>Đơn hàng sẽ được giao trong 2 ngày làm việc.</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Body</td><td><div class="t-body" data-type>Khách hàng: Nguyễn Thu Hà, 0912 345 678.</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Body Small</td><td><div class="t-body-sm" data-type>Phí vận chuyển đã gồm VAT.</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Caption</td><td><div class="t-caption" data-type>Mã đơn DH-10293</div></td><td class="mono" data-type-spec></td></tr>
+          <tr><td>Overline</td><td><div class="t-overline" data-type>Trạng thái</div></td><td class="mono" data-type-spec></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. Form controls -->
+  <section>
+    <h2 class="t-h2">Form controls</h2>
+
+    <h3 class="t-h5">Buttons</h3>
+    <div class="stack">
+      <div class="row"><span class="label">Kiểu</span>
+        <button class="btn" data-proto="skip">Primary</button>
+        <button class="btn btn-secondary" data-proto="skip">Secondary</button>
+        <button class="btn btn-outline" data-proto="skip">Outline</button>
+        <button class="btn btn-ghost" data-proto="skip">Ghost</button>
+        <button class="btn btn-link" data-proto="skip">Link</button>
+        <button class="btn btn-danger" data-proto="skip">Danger</button>
+      </div>
+      <div class="row"><span class="label">Kích thước</span>
+        <button class="btn btn-sm" data-proto="skip">Small</button>
+        <button class="btn" data-proto="skip">Medium</button>
+        <button class="btn btn-lg" data-proto="skip">Large</button>
+      </div>
+      <div class="row"><span class="label">Trạng thái</span>
+        <button class="btn" data-proto="skip">Default</button>
+        <button class="btn is-hover" data-proto="skip">Hover</button>
+        <button class="btn is-active" data-proto="skip">Active</button>
+        <button class="btn is-focus" data-proto="skip">Focus ring</button>
+        <button class="btn" disabled>Disabled</button>
+        <button class="btn is-loading" data-proto="skip"><span class="spinner" aria-hidden="true"></span>Đang lưu</button>
+        <button class="btn btn-outline" data-proto="skip" data-sd-loading>Bấm thử loading</button>
+      </div>
+    </div>
+
+    <h3 class="t-h5">Input fields</h3>
+    <div class="two">
+      <div class="field"><label for="sd-i1">Default</label><input id="sd-i1" class="input" placeholder="Tên khách hàng"></div>
+      <div class="field"><label for="sd-i2">Hover</label><input id="sd-i2" class="input is-hover" value="Nguyễn Thu Hà"></div>
+      <div class="field"><label for="sd-i3">Focus</label><input id="sd-i3" class="input is-focus" value="Nguyễn Thu Hà"></div>
+      <div class="field"><label for="sd-i4">Disabled</label><input id="sd-i4" class="input" value="DH-10293" disabled></div>
+      <div class="field"><label for="sd-i5">Error</label><input id="sd-i5" class="input is-error" value="thu.ha@" aria-invalid="true" aria-describedby="sd-e5"><span id="sd-e5" class="field-error">Email không hợp lệ</span></div>
+      <div class="field"><label for="sd-i6">Select</label><select id="sd-i6" class="input"><option>Đang giao</option><option>Mới</option><option>Hoàn tất</option></select></div>
+      <div class="field"><label for="sd-i7">Search</label><div class="search"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input id="sd-i7" class="input" type="search" placeholder="Tìm đơn hàng"></div></div>
+      <div class="field"><label for="sd-i8">Textarea</label><textarea id="sd-i8" class="input">Giao giờ hành chính.</textarea></div>
+    </div>
+
+    <h3 class="t-h5">Input kèm nút (i)</h3>
+    <!-- Nút (i) nằm cạnh nhãn: hover, focus bàn phím hoặc chạm để hiện tooltip; Esc để đóng.
+         Thẻ tùy chọn khi gập chỉ ẩn ô nhập, hàng nhãn kèm (i) vẫn hiện (data-sd-fold). -->
+    <div class="two">
+      <div class="field">
+        <div class="field-label"><label for="sd-n1">Mã đơn</label><span class="info"><button type="button" class="info-btn" aria-label="Gợi ý cho ô Mã đơn" aria-describedby="sd-t1">i</button><span role="tooltip" id="sd-t1">Mã gồm tiền tố DH và 5 chữ số, ví dụ DH-10293.</span></span></div>
+        <input id="sd-n1" class="input" placeholder="DH-10293">
+      </div>
+      <div class="field">
+        <div class="field-label"><label for="sd-n2">Trạng thái</label><span class="info"><button type="button" class="info-btn" aria-label="Gợi ý cho ô Trạng thái" aria-describedby="sd-t2">i</button><span role="tooltip" id="sd-t2">Chọn giai đoạn hiện tại của đơn hàng.</span></span></div>
+        <select id="sd-n2" class="input"><option>Đang giao</option><option>Mới</option><option>Hoàn tất</option></select>
+      </div>
+    </div>
+    <div class="card" style="margin-top:var(--space-4)" data-sd-fold>
+      <div class="row" style="justify-content:space-between;padding:var(--space-3) var(--space-4)">
+        <span class="t-h6">Tùy chọn giao hàng</span>
+        <button class="btn btn-ghost btn-sm" data-proto="skip" aria-expanded="true" data-sd-fold-toggle>Thu gọn</button>
+      </div>
+      <div class="two" style="padding:0 var(--space-4) var(--space-4)">
+        <div class="field">
+          <div class="field-label"><label for="sd-n3">Ghi chú giao hàng</label><span class="info"><button type="button" class="info-btn" aria-label="Gợi ý cho ô Ghi chú giao hàng" aria-describedby="sd-t3">i</button><span role="tooltip" id="sd-t3">Dặn shipper về giờ nhận hoặc điểm giao thay thế.</span></span></div>
+          <textarea id="sd-n3" class="input" data-sd-fold-body>Giao giờ hành chính.</textarea>
+        </div>
+        <div class="field">
+          <div class="field-label"><label for="sd-n4">Phí vận chuyển</label><span class="info"><button type="button" class="info-btn" aria-label="Gợi ý cho ô Phí vận chuyển" aria-describedby="sd-t4">i</button><span role="tooltip" id="sd-t4">Nhập số tiền theo đồng, để trống nếu miễn phí.</span></span></div>
+          <input id="sd-n4" class="input" data-sd-fold-body placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <h3 class="t-h5">Selection controls</h3>
+    <div class="two">
+      <div class="stack">
+        <label class="check"><input type="checkbox" checked><span>Checkbox checked</span></label>
+        <label class="check"><input type="checkbox"><span>Checkbox unchecked</span></label>
+        <label class="check"><input type="checkbox" data-sd-indeterminate><span>Checkbox indeterminate</span></label>
+        <label class="check"><input type="checkbox" disabled><span>Checkbox disabled</span></label>
+      </div>
+      <div class="stack">
+        <label class="check"><input type="radio" name="sd-r" checked><span>Radio checked</span></label>
+        <label class="check"><input type="radio" name="sd-r"><span>Radio unchecked</span></label>
+        <label class="check"><input type="radio" disabled><span>Radio disabled</span></label>
+      </div>
+      <div class="stack">
+        <label class="switch"><input type="checkbox" checked><span class="track"></span><span>Toggle on</span></label>
+        <label class="switch"><input type="checkbox"><span class="track"></span><span>Toggle off</span></label>
+        <label class="switch"><input type="checkbox" disabled><span class="track"></span><span>Toggle disabled</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Icons và avatar -->
+  <section>
+    <h2 class="t-h2">Icons và avatars</h2>
+    <h3 class="t-h5">Icon cốt lõi (nét 2px)</h3>
+    <div class="icons">
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Trang chủ</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Tìm kiếm</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Thêm</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Sửa</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Xóa</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Lọc</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Thông báo</div>
+      <div><svg class="ic" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Cài đặt</div>
+    </div>
+    <h3 class="t-h5">Kích thước icon</h3>
+    <div class="row">
+      <svg class="ic" width="16" height="16" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><code>16</code>
+      <svg class="ic" width="20" height="20" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><code>20</code>
+      <svg class="ic" width="24" height="24" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><code>24</code>
+      <svg class="ic" width="32" height="32" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><code>32</code>
+    </div>
+    <h3 class="t-h5">Avatars</h3>
+    <div class="stack">
+      <div class="row"><span class="label">Tròn</span>
+        <span class="avatar" style="width:24px;height:24px;font-size:10px">HA</span>
+        <span class="avatar" style="width:32px;height:32px;font-size:12px">HA</span>
+        <span class="avatar" style="width:40px;height:40px;font-size:14px">HA</span>
+        <span class="avatar" style="width:48px;height:48px;font-size:16px">HA</span>
+        <span class="avatar" style="width:64px;height:64px;font-size:20px">HA</span>
+        <code>XS 24 · SM 32 · MD 40 · LG 48 · XL 64</code>
+      </div>
+      <div class="row"><span class="label">Bo góc</span>
+        <span class="avatar sq" style="width:32px;height:32px;font-size:12px">TM</span>
+        <span class="avatar sq" style="width:40px;height:40px;font-size:14px">TM</span>
+        <span class="avatar sq" style="width:48px;height:48px;font-size:16px">TM</span>
+      </div>
+      <div class="row"><span class="label">Trạng thái</span>
+        <span class="avatar" style="width:40px;height:40px;font-size:14px" title="Online">HA<span class="dot" style="background:var(--success)"></span></span>
+        <span class="avatar" style="width:40px;height:40px;font-size:14px" title="Offline">TM<span class="dot" style="background:var(--muted)"></span></span>
+        <span class="avatar" style="width:40px;height:40px;font-size:14px" title="Busy">QN<span class="dot" style="background:var(--danger)"></span></span>
+        <code>online · offline · busy</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Component cơ bản -->
+  <section>
+    <h2 class="t-h2">Component cơ bản</h2>
+
+    <h3 class="t-h5">Badges và tags</h3>
+    <div class="stack">
+      <div class="row"><span class="label">Solid</span><span class="badge badge-solid tone-primary">Mới</span><span class="badge badge-solid tone-success">Hoàn tất</span><span class="badge badge-solid tone-warning">Chờ duyệt</span><span class="badge badge-solid tone-danger">Đã hủy</span><span class="badge badge-solid tone-info">Đang giao</span></div>
+      <div class="row"><span class="label">Soft</span><span class="badge badge-soft tone-primary">Mới</span><span class="badge badge-soft tone-success">Hoàn tất</span><span class="badge badge-soft tone-warning">Chờ duyệt</span><span class="badge badge-soft tone-danger">Đã hủy</span><span class="badge badge-soft tone-info">Đang giao</span></div>
+      <div class="row"><span class="label">Outline</span><span class="badge badge-outline tone-primary">Mới</span><span class="badge badge-outline tone-neutral">Nháp</span></div>
+      <div class="row"><span class="label">Dismiss</span>
+        <span class="badge badge-soft tone-neutral">Hà Nội<button class="x" data-proto="skip" data-sd-dismiss aria-label="Bỏ Hà Nội">×</button></span>
+        <span class="badge badge-soft tone-neutral">TP.HCM<button class="x" data-proto="skip" data-sd-dismiss aria-label="Bỏ TP.HCM">×</button></span>
+      </div>
+    </div>
+
+    <h3 class="t-h5">Feedback</h3>
+    <div class="stack">
+      <div class="alert tone-success" role="status"><strong>Đã lưu</strong><span>Đơn DH-10293 đã được cập nhật.</span></div>
+      <div class="alert tone-warning" role="status"><strong>Sắp hết hạn</strong><span>Mã giảm giá hết hạn sau 2 ngày.</span></div>
+      <div class="alert tone-danger" role="alert"><strong>Không thể giao</strong><span>Địa chỉ người nhận chưa đầy đủ.</span></div>
+      <div class="alert tone-info" role="status"><strong>Lưu ý</strong><span>Đơn sau 17:00 giao vào ngày hôm sau.</span></div>
+      <div class="row"><button class="btn btn-outline">Hiện thông báo</button></div>
+    </div>
+
+    <h3 class="t-h5">Navigation</h3>
+    <div class="stack">
+      <div class="tabs" role="tablist" data-sd-tabs>
+        <button role="tab" aria-selected="true" data-proto="skip">Tất cả</button>
+        <button role="tab" aria-selected="false" data-proto="skip">Đang giao</button>
+        <button role="tab" aria-selected="false" data-proto="skip">Hoàn tất</button>
+      </div>
+      <div><div class="pills" role="tablist" data-sd-tabs>
+        <button role="tab" aria-selected="true" data-proto="skip">Ngày</button>
+        <button role="tab" aria-selected="false" data-proto="skip">Tuần</button>
+        <button role="tab" aria-selected="false" data-proto="skip">Tháng</button>
+      </div></div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="#">Trang chủ</a><span>/</span><a href="#">Đơn hàng</a><span>/</span><span aria-current="page">DH-10293</span></nav>
+      <div class="pager" data-sd-pager>
+        <button data-proto="skip" aria-label="Trang trước">‹</button>
+        <button data-proto="skip" aria-current="page">1</button>
+        <button data-proto="skip">2</button>
+        <button data-proto="skip">3</button>
+        <button data-proto="skip" aria-label="Trang sau">›</button>
+      </div>
+    </div>
+
+    <h3 class="t-h5">Overlays</h3>
+    <div class="row">
+      <button class="btn">Mở hộp thoại</button>
+      <span class="tip"><button class="btn btn-outline" data-proto="skip" aria-describedby="sd-tip">Tooltip</button><span role="tooltip" id="sd-tip">Xuất danh sách theo bộ lọc</span></span>
+      <span class="menu" data-sd-menu>
+        <button class="btn btn-outline" data-proto="skip" aria-haspopup="menu" aria-expanded="false">Thao tác ▾</button>
+        <ul role="menu" hidden>
+          <li><a role="menuitem" href="#">Sao chép đơn</a></li>
+          <li><a role="menuitem" href="#">In phiếu giao</a></li>
+          <li><a role="menuitem" href="#" class="danger">Hủy đơn</a></li>
+        </ul>
+      </span>
+    </div>
+
+    <h3 class="t-h5">Table</h3>
+    <div class="card scroll">
+      <table class="table striped">
+        <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody>
+          <tr><td>DH-10293</td><td>Nguyễn Thu Hà</td><td>1.250.000 ₫</td><td><span class="badge badge-soft tone-info">Đang giao</span></td><td><button class="btn btn-ghost">Xem</button><button class="btn btn-ghost">Sửa</button><button class="btn btn-ghost">Xóa</button></td></tr>
+          <tr><td>DH-10292</td><td>Trần Minh Quân</td><td>480.000 ₫</td><td><span class="badge badge-soft tone-success">Hoàn tất</span></td><td><button class="btn btn-ghost">Xem</button><button class="btn btn-ghost">Sửa</button><button class="btn btn-ghost">Xóa</button></td></tr>
+          <tr><td>DH-10291</td><td>Lê Phương Anh</td><td>2.100.000 ₫</td><td><span class="badge badge-soft tone-warning">Chờ duyệt</span></td><td><button class="btn btn-ghost">Xem</button><button class="btn btn-ghost">Sửa</button><button class="btn btn-ghost">Xóa</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. Trạng thái giao diện -->
+  <section>
+    <h2 class="t-h2">Trạng thái giao diện</h2>
+    <h3 class="t-h5">Skeleton</h3>
+    <div class="two">
+      <div class="card" style="padding:var(--space-4)" aria-busy="true">
+        <div class="row" style="flex-wrap:nowrap"><div class="skeleton" style="width:40px;height:40px;border-radius:var(--radius-full);flex:none"></div>
+          <div class="stack" style="flex:1;gap:var(--space-2)"><div class="skeleton" style="height:12px;width:60%"></div><div class="skeleton" style="height:12px;width:40%"></div></div></div>
+        <div class="skeleton" style="height:96px;margin-top:var(--space-4)"></div>
+      </div>
+      <div class="card" style="padding:var(--space-4)" aria-busy="true">
+        <div class="stack" style="gap:var(--space-3)">
+          <div class="skeleton" style="height:16px"></div><div class="skeleton" style="height:16px"></div><div class="skeleton" style="height:16px;width:80%"></div><div class="skeleton" style="height:16px"></div>
+        </div>
+      </div>
+    </div>
+    <h3 class="t-h5">Empty và lỗi</h3>
+    <div class="two">
+      <div class="card state">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <div class="t-h5">Chưa có đơn hàng</div>
+        <p class="t-body-sm" style="color:var(--text-2)">Đơn hàng mới sẽ hiện ở đây.</p>
+        <button class="btn" data-proto="skip">Tạo đơn hàng</button>
+      </div>
+      <div class="card state">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--danger)"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <div class="t-h5">Mất kết nối</div>
+        <p class="t-body-sm" style="color:var(--text-2)">Không tải được dữ liệu. Kiểm tra mạng và thử lại.</p>
+        <button class="btn btn-outline">Thử lại</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Layout, spacing, motion -->
+  <section>
+    <h2 class="t-h2">Layout, spacing và motion</h2>
+    <div class="two">
+      <div class="card" style="padding:var(--space-4)">
+        <div class="t-h6" style="margin-bottom:var(--space-3)">Spacing</div>
+        <table class="spec"><tbody>
+          <tr><td class="mono">space-1</td><td style="width:100%"><div class="bar" style="width:var(--space-1)"></div></td><td class="mono" data-var="--space-1"></td></tr>
+          <tr><td class="mono">space-2</td><td><div class="bar" style="width:var(--space-2)"></div></td><td class="mono" data-var="--space-2"></td></tr>
+          <tr><td class="mono">space-3</td><td><div class="bar" style="width:var(--space-3)"></div></td><td class="mono" data-var="--space-3"></td></tr>
+          <tr><td class="mono">space-4</td><td><div class="bar" style="width:var(--space-4)"></div></td><td class="mono" data-var="--space-4"></td></tr>
+          <tr><td class="mono">space-5</td><td><div class="bar" style="width:var(--space-5)"></div></td><td class="mono" data-var="--space-5"></td></tr>
+          <tr><td class="mono">space-6</td><td><div class="bar" style="width:var(--space-6)"></div></td><td class="mono" data-var="--space-6"></td></tr>
+          <tr><td class="mono">space-7</td><td><div class="bar" style="width:var(--space-7)"></div></td><td class="mono" data-var="--space-7"></td></tr>
+          <tr><td class="mono">space-8</td><td><div class="bar" style="width:var(--space-8)"></div></td><td class="mono" data-var="--space-8"></td></tr>
+        </tbody></table>
+      </div>
+      <div class="stack">
+        <div class="card" style="padding:var(--space-4)">
+          <div class="t-h6" style="margin-bottom:var(--space-3)">Breakpoints và container</div>
+          <table class="spec"><tbody>
+            <tr><td class="mono">sm</td><td class="mono" data-var="--bp-sm"></td></tr>
+            <tr><td class="mono">md</td><td class="mono" data-var="--bp-md"></td></tr>
+            <tr><td class="mono">lg</td><td class="mono" data-var="--bp-lg"></td></tr>
+            <tr><td class="mono">xl</td><td class="mono" data-var="--bp-xl"></td></tr>
+            <tr><td class="mono">container</td><td class="mono" data-var="--container"></td></tr>
+            <tr><td class="mono">control h</td><td class="mono"><span data-var="--h-sm"></span> · <span data-var="--h-md"></span> · <span data-var="--h-lg"></span></td></tr>
+          </tbody></table>
+        </div>
+        <div class="card" style="padding:var(--space-4)">
+          <div class="t-h6" style="margin-bottom:var(--space-3)">Motion</div>
+          <table class="spec"><tbody>
+            <tr><td class="mono">fast</td><td class="mono" data-var="--dur-fast"></td><td><div class="motion-track"><div class="motion" style="transition-duration:var(--dur-fast);transition-timing-function:var(--ease-standard)"></div></div></td></tr>
+            <tr><td class="mono">base</td><td class="mono" data-var="--dur-base"></td><td><div class="motion-track"><div class="motion" style="transition-duration:var(--dur-base);transition-timing-function:var(--ease-standard)"></div></div></td></tr>
+            <tr><td class="mono">slow</td><td class="mono" data-var="--dur-slow"></td><td><div class="motion-track"><div class="motion" style="transition-duration:var(--dur-slow);transition-timing-function:var(--ease-standard)"></div></div></td></tr>
+            <tr><td class="mono">standard</td><td class="mono" colspan="2" data-var="--ease-standard"></td></tr>
+            <tr><td class="mono">out</td><td class="mono" colspan="2" data-var="--ease-out"></td></tr>
+            <tr><td class="mono">in</td><td class="mono" colspan="2" data-var="--ease-in"></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Quy định chung (gộp từ màn blank cũ) -->
+  <section>
+    <h2 class="t-h2">Quy định chung</h2>
+    <div class="card scroll">
+      <table class="spec"><tbody>
+        <tr><th>Ngôn ngữ</th><td>Tiếng Việt, câu ngắn, không viết tắt khó hiểu</td></tr>
+        <tr><th>Ngày, số, tiền</th><td>dd/mm/yyyy · 1.234,5 · 1.234.000 ₫</td></tr>
+        <tr><th>Icon</th><td>Một bộ icon nét 2px; nút trong bảng chỉ có icon kèm tooltip</td></tr>
+        <tr><th>Tương tác</th><td>Hover, nhấn, focus theo token; focus luôn nhìn thấy</td></tr>
+        <tr><th>Thao tác nguy hiểm</th><td>Luôn có hộp thoại xác nhận, nút xác nhận màu danger</td></tr>
+        <tr><th>Trạng thái dữ liệu</th><td>Đủ đang tải, rỗng, lỗi, thành công</td></tr>
+        <tr><th>Tiếp cận</th><td>Tương phản chữ tối thiểu 4.5:1; nút icon có aria-label</td></tr>
+        <tr><th>Dữ liệu mẫu</th><td>Thực tế, tiếng Việt, không dùng dữ liệu thật</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Đọc token thật từ :root để hiển thị (đổi token ở frame.html là màn này tự đúng) */
+(function () {
+  var root = getComputedStyle(document.documentElement);
+  function hex(c) {
+    var m = c.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+([\d.]+))?/);
+    if (!m) return c;
+    var h = "#" + [m[1], m[2], m[3]].map(function (n) { return (+n).toString(16).padStart(2, "0"); }).join("").toUpperCase();
+    return m[4] !== undefined && +m[4] < 1 ? h + " / " + Math.round(+m[4] * 100) + "%" : h;
+  }
+  document.querySelectorAll(".swatch[data-token]").forEach(function (el) {
+    var probe = el.querySelector("i");
+    probe.style.background = "var(" + el.dataset.token + ")";
+    el.querySelector("[data-hex]").textContent = hex(getComputedStyle(probe).backgroundColor) + "  " + el.dataset.token;
+  });
+  document.querySelectorAll("[data-var]").forEach(function (el) {
+    el.textContent = root.getPropertyValue(el.dataset.var).trim();
+  });
+  document.querySelectorAll("[data-type]").forEach(function (el) {
+    var s = getComputedStyle(el), cell = el.closest("tr").querySelector("[data-type-spec]");
+    cell.textContent = s.fontSize + " / " + s.lineHeight + " / " + s.fontWeight;
+  });
+
+  /* Checkbox indeterminate chỉ đặt được bằng script */
+  document.querySelectorAll("[data-sd-indeterminate]").forEach(function (el) { el.indeterminate = true; });
+
+  /* Tabs và pills */
+  document.querySelectorAll("[data-sd-tabs]").forEach(function (list) {
+    list.addEventListener("click", function (e) {
+      var t = e.target.closest('[role="tab"]'); if (!t) return;
+      list.querySelectorAll('[role="tab"]').forEach(function (b) { b.setAttribute("aria-selected", b === t ? "true" : "false"); });
+    });
+  });
+
+  /* Phân trang */
+  document.querySelectorAll("[data-sd-pager]").forEach(function (p) {
+    var pages = [].slice.call(p.querySelectorAll("button")).filter(function (b) { return /^\d+$/.test(b.textContent); });
+    p.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      var cur = pages.findIndex(function (x) { return x.hasAttribute("aria-current"); });
+      var next = pages.indexOf(b);
+      if (next < 0) next = Math.max(0, Math.min(pages.length - 1, cur + (b.textContent === "›" ? 1 : -1)));
+      pages.forEach(function (x, i) { if (i === next) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current"); });
+    });
+  });
+
+  /* Menu thả xuống */
+  document.querySelectorAll("[data-sd-menu]").forEach(function (m) {
+    var btn = m.querySelector("button"), list = m.querySelector("ul");
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = list.hidden; list.hidden = !open; btn.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function () { list.hidden = true; btn.setAttribute("aria-expanded", "false"); });
+    list.addEventListener("click", function (e) { e.preventDefault(); });
+  });
+
+  /* Xóa tag */
+  document.querySelectorAll("[data-sd-dismiss]").forEach(function (b) {
+    b.addEventListener("click", function () { b.closest(".badge").remove(); });
+  });
+
+  /* Thẻ tùy chọn gập: chỉ ẩn ô nhập, nhãn và nút (i) vẫn hiện */
+  document.querySelectorAll("[data-sd-fold]").forEach(function (card) {
+    var btn = card.querySelector("[data-sd-fold-toggle]");
+    btn.addEventListener("click", function () {
+      var open = btn.getAttribute("aria-expanded") !== "true";
+      btn.setAttribute("aria-expanded", String(open));
+      btn.textContent = open ? "Thu gọn" : "Mở rộng";
+      card.querySelectorAll("[data-sd-fold-body]").forEach(function (el) { el.hidden = !open; });
+    });
+  });
+
+  /* Nút loading */
+  document.querySelectorAll("[data-sd-loading]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var html = b.innerHTML;
+      b.classList.add("is-loading"); b.innerHTML = '<span class="spinner" aria-hidden="true"></span>Đang lưu';
+      setTimeout(function () { b.classList.remove("is-loading"); b.innerHTML = html; }, 1200);
+    });
+  });
+  document.querySelectorAll(".crumbs a").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); }); });
+})();
+</script>

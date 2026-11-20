@@ -1,0 +1,3 @@
+# Codex CLI: chỉ chạy khi người dùng gọi rõ $nqdev-unit-test-generator (skill ghi file test trong repo)
+policy:
+  allow_implicit_invocation: false

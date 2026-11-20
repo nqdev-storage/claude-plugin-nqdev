@@ -1,0 +1,19 @@
+{
+  "name": "nqdev-marketplace",
+  "description": "Marketplace chứa plugin nqdev và vhs",
+  "owner": {
+    "name": "Nguyễn Quý"
+  },
+  "plugins": [
+    {
+      "name": "nqdev",
+      "source": "./nqdev",
+      "description": "Bộ skill và slash command của nqdev theo flow coding, kèm 4 workflow dựng sẵn (tính năng mới, sửa bug, khởi tạo dự án, release): viết BRD, ước lượng, thiết kế UI, khởi tạo rule cho AI, viết plan, code và sửa bug, sinh test case, viết unit test, review, soạn MR và release note, trích xuất luồng nghiệp vụ; đồng bộ plan/git/Jira/Google Sheet."
+    },
+    {
+      "name": "vhs",
+      "source": "./vhs",
+      "description": "Bộ skill của ViHAT: tinh chỉnh prompt thô theo lĩnh vực với context lấy từ workspace, và viết tài liệu hướng dẫn sử dụng cho người dùng cuối từ source code."
+    }
+  ]
+}
