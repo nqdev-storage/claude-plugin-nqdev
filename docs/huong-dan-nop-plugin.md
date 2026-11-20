@@ -12,7 +12,7 @@ Có **hai con đường** phát hành plugin. Chúng khác nhau hoàn toàn.
 | Là gì | Plugin được liệt kê trên https://claude.com/marketplace/plugins | Repo GitHub của bạn tự đóng vai marketplace |
 | Cần form nộp | Có, qua developer portal | Không |
 | Duyệt | Quét tự động và người duyệt bản đầu tiên | Không ai duyệt |
-| Người dùng cài bằng | Duyệt trong `/plugin`, plugin hiện dạng `nqdev@synced` | `/plugin marketplace add nqdev-storage/claude-plugin-nqdev#main` |
+| Người dùng cài bằng | Duyệt trong `/plugin`, plugin hiện dạng `nqdev@synced` | `/plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist` |
 | Yêu cầu | Tài khoản Claude trả phí | Chỉ cần repo public hoặc quyền truy cập repo |
 
 > `claude-plugins-official` (marketplace do Anthropic quản lý) **không nhận submission qua portal**. Đừng nộp vào đó.
@@ -24,7 +24,7 @@ Repo này đã sẵn sàng cho **cả hai** đường: có `plugin.json` và `ma
 Sau khi push repo lên GitHub, người dùng cài như sau:
 
 ```bash
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 claude plugin install nqdev@nqdev-marketplace
 ```
 

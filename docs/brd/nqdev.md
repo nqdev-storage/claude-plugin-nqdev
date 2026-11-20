@@ -83,7 +83,7 @@
 
 - **Tác nhân:** Người dùng (dev).
 - **Điều kiện trước:** Đã cài và đăng nhập Claude Code, máy có Git, truy cập được repo (HDCĐ).
-- **Luồng chính:** 1. Người dùng chạy `claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main`. 2. Claude Code clone branch `main` của repo phát hành (chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE`) và đọc `marketplace.json`. 3. Người dùng chạy `claude plugin install nqdev@nqdev-marketplace`, có thể kèm `--scope project`. 4. Người dùng chạy `/reload-plugins`. 5. Người dùng kiểm tra bằng `claude plugin list`.
+- **Luồng chính:** 1. Người dùng chạy `claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist`. 2. Claude Code clone branch `dist` của repo phát hành (chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE`) và đọc `marketplace.json`. 3. Người dùng chạy `claude plugin install nqdev@nqdev-marketplace`, có thể kèm `--scope project`. 4. Người dùng chạy `/reload-plugins`. 5. Người dùng kiểm tra bằng `claude plugin list`.
 - **Ngoại lệ:** Gõ sai nguồn: Claude Code báo `Invalid marketplace source format`. Thiếu `@nqdev-marketplace`: báo `Plugin "nqdev" not found in any marketplace`. Repo private mà Git không xác thực được: báo `SSH/HTTPS authentication failed` (HDCĐ).
 - **Kết quả:** `nqdev` xuất hiện trong danh sách plugin đã cài, gọi được `/nqdev:<tên>`.
 - **Thoả BR:** BR-NQDEV-001, BR-NQDEV-002, BR-NQDEV-003, BR-NQDEV-007
@@ -152,7 +152,7 @@
 
 | Mã | Cho (Given) | Khi (When) | Thì (Then) | Thoả BR |
 |---|---|---|---|---|
-| AC-NQDEV-001 | Máy có Claude Code và Git, chưa cài `nqdev` | Chạy `claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main` rồi `claude plugin install nqdev@nqdev-marketplace` | `claude plugin list` có dòng `nqdev`, cả hai lệnh kết thúc không lỗi | BR-NQDEV-001 |
+| AC-NQDEV-001 | Máy có Claude Code và Git, chưa cài `nqdev` | Chạy `claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist` rồi `claude plugin install nqdev@nqdev-marketplace` | `claude plugin list` có dòng `nqdev`, cả hai lệnh kết thúc không lỗi | BR-NQDEV-001 |
 | AC-NQDEV-002 | Một bản clone local của repo | Chạy `claude plugin marketplace add ./` trong thư mục clone | Marketplace `nqdev-marketplace` được thêm, không báo `Invalid marketplace source format` | BR-NQDEV-002 |
 | AC-NQDEV-003 | Một repo dự án chưa có `.claude/settings.json` | Chạy `claude plugin install nqdev@nqdev-marketplace --scope project` | `.claude/settings.json` của dự án có khai báo bật plugin `nqdev` | BR-NQDEV-003 |
 | AC-NQDEV-004 | Một commit phát hành có sửa skill hoặc command | Soát `nqdev/.claude-plugin/plugin.json` trước khi phát hành | `version` lớn hơn `version` của bản phát hành trước theo SemVer | BR-NQDEV-004 |
@@ -250,5 +250,6 @@ Plugin không thay thế một hệ thống khác. Phần dưới đây đối c
 - 2026-11-18 — Bản đầu, viết từ README.md và docs/ của plugin v1.1.0.
 - 2026-11-18 — Cập nhật đường dẫn theo cấu trúc v1.2.0: plugin nằm trong `nqdev/`, `source: "./nqdev"`. Số dòng `README:<dòng>` đã dời theo `nqdev/README.md`. Không đổi BR nào.
 - 2026-11-20 — UC cài plugin và AC-NQDEV-001 dùng `nqdev-storage/claude-plugin-nqdev#dist` (branch phát hành do `publish-dist.yml` đồng bộ từ `main`). Không đổi BR nào.
-- 2026-11-20 — Đổi lệnh cài sang `nqdev-storage/claude-plugin-nqdev#main`: `publish-dist.yml` đẩy bản phát hành vào `main` của repo public. Không đổi BR nào.
+- 2026-11-20 — Đổi lệnh cài sang `nqdev-storage/claude-plugin-nqdev#dist`: `publish-dist.yml` đẩy bản phát hành vào `main` của repo public. Không đổi BR nào.
+- 2026-11-20 — Đổi lại lệnh cài về `nqdev-storage/claude-plugin-nqdev#dist`: `publish-dist.yml` phát hành vào `dist` của repo public. Không đổi BR nào.
 - 2026-11-20 — Làm gọn: bỏ số dòng trong mọi tham chiếu nguồn (đã lệch so với tài liệu hiện tại), chỉ giữ tên file. Không đổi BR/AC/UC nào.

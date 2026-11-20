@@ -34,7 +34,7 @@ Chạy trong terminal (CLI):
 
 ```bash
 # Bước 1: thêm marketplace từ repo GitHub
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 
 # Bước 2: cài plugin
 claude plugin install nqdev@nqdev-marketplace
@@ -43,15 +43,15 @@ claude plugin install nqdev@nqdev-marketplace
 Hoặc gõ trực tiếp trong phiên Claude Code:
 
 ```
-/plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
+/plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 /plugin install nqdev@nqdev-marketplace
 ```
 
 Sau khi cài, chạy `/reload-plugins` để áp dụng ngay trong phiên đang mở (hoặc khởi động lại Claude Code).
 
-> **Branch `main` của repo này chứa gì?** CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) tự đồng bộ nó từ repo phát triển mỗi khi có push, chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
+> **Branch `dist` của repo này chứa gì?** CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) tự đồng bộ nó từ repo phát triển mỗi khi có push, chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
 >
-> Đã cài theo lệnh cũ (`#dist`): chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh ở Bước 1. Plugin đã cài vẫn giữ tên `<plugin>@nqdev-marketplace`.
+> Đã cài theo lệnh cũ (không có `#dist`, hoặc `#main`): chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh ở Bước 1. Plugin đã cài vẫn giữ tên `<plugin>@nqdev-marketplace`.
 
 ### 3.2. Các dạng nguồn Git khác
 
@@ -70,20 +70,20 @@ Lưu ý:
 
 ### 3.3. Cài một phiên bản cố định (tag hoặc branch)
 
-Thêm `#<ref>` vào sau nguồn để ghim vào tag hoặc branch:
+Thêm `#<ref>` vào sau nguồn để ghim vào tag hoặc branch. Mỗi bản phát hành có tag `vX.Y.Z` ở repo `nqdev-storage/claude-plugin-nqdev`:
 
 ```bash
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#vX.Y.Z
 ```
 
-Repo `nqdev-storage/claude-plugin-nqdev` phát hành plugin qua branch `main` (site tài liệu ở `gh-pages`). Cần bản chưa phát hành thì dùng repo phát triển, nếu bạn có quyền truy cập: `nqdev-storage/claude-plugin-nqdev-develop#main` (tải cả repo, gồm `plans/`, `docs/`, `.claude/`).
+Repo `nqdev-storage/claude-plugin-nqdev` phát hành plugin qua branch `dist` (site tài liệu ở `gh-pages`). Cần bản chưa phát hành thì dùng repo phát triển, nếu bạn có quyền truy cập: `nqdev-storage/claude-plugin-nqdev-develop#main` (tải cả repo, gồm `plans/`, `docs/`, `.claude/`).
 
 > Tôi chưa thấy tài liệu nào mô tả cờ `--ref`. Hãy dùng dạng `#<ref>` ở trên.
 
 ### 3.4. Cài từ bản clone local (phù hợp khi phát triển hoặc thử nghiệm)
 
 ```bash
-git clone -b main https://github.com/nqdev-storage/claude-plugin-nqdev.git
+git clone -b dist https://github.com/nqdev-storage/claude-plugin-nqdev.git
 cd claude-plugin-nqdev
 
 claude plugin marketplace add ./
@@ -97,7 +97,7 @@ Với marketplace local, sau khi sửa file chỉ cần chạy `/reload-plugins`
 Bản Claude Code mới có cờ `--marketplace` để gộp hai bước:
 
 ```bash
-claude plugin install nqdev --marketplace nqdev-storage/claude-plugin-nqdev#main
+claude plugin install nqdev --marketplace nqdev-storage/claude-plugin-nqdev#dist
 ```
 
 Cờ này cần Claude Code đủ mới (CLI từ v2.1.292, trong phiên từ v2.1.275). Nếu lệnh báo lỗi, dùng cách hai bước ở mục 3.1.
@@ -305,7 +305,7 @@ git ls-remote https://github.com/nqdev-storage/claude-plugin-nqdev.git
 Chạy một lần trong thư mục dự án, rồi commit file `.claude/settings.json` được tạo ra:
 
 ```bash
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main --scope project
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist --scope project
 claude plugin install nqdev@nqdev-marketplace --scope project
 ```
 
@@ -335,7 +335,7 @@ Hai CLI này không đọc được marketplace của Claude Code, nên cần co
 Bước chung: clone repo.
 
 ```bash
-git clone -b main https://github.com/nqdev-storage/claude-plugin-nqdev.git
+git clone -b dist https://github.com/nqdev-storage/claude-plugin-nqdev.git
 ```
 
 ### 9.1. Codex CLI
