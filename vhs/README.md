@@ -7,7 +7,7 @@ Skill trong plugin này **không** theo quy tắc đặt tên `nqdev-*` của pl
 ## Cài đặt
 
 ```bash
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist   # một lần
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main   # một lần
 claude plugin install vhs@nqdev-marketplace
 ```
 

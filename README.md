@@ -13,7 +13,7 @@ Marketplace Claude Code của nqdev (QuyIT Platform). Mỗi plugin nằm trong m
 
 ```bash
 # Thêm marketplace (một lần)
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
 
 # Cài plugin
 claude plugin install nqdev@nqdev-marketplace
@@ -22,7 +22,7 @@ claude plugin install vhs@nqdev-marketplace   # tuỳ chọn
 
 Trong phiên Claude Code có thể dùng `/plugin marketplace add ...` và `/plugin install ...`. Cú pháp cài luôn là `<plugin>@nqdev-marketplace`.
 
-`#dist` là branch phát hành, CI tự đồng bộ từ `main` và chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE`. Đã cài theo lệnh cũ (không có `#dist`)? Chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh trên.
+Repo `nqdev-storage/claude-plugin-nqdev` là bản phát hành: CI tự đồng bộ branch `main` của nó từ repo phát triển, chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE`. Đã cài theo lệnh cũ (`#dist`)? Chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh trên.
 
 Chi tiết (scope, repo private, cập nhật, xử lý sự cố, dùng skill trên Codex CLI và Gemini CLI): [Hướng dẫn cài đặt và sử dụng](docs/huong-dan-cai-dat-va-su-dung.md).
 
