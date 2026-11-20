@@ -31,7 +31,7 @@ Không truyền `--from` thì workflow tự dò repo (`docs/brd/`, `plans/`, `gi
 
 ```bash
 # Thêm marketplace từ GitHub (branch phát hành dist, chỉ chứa file cần cài)
-claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#main
+claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 # hoặc từ bản clone local khi phát triển: claude plugin marketplace add ./
 
 # Cài plugin
