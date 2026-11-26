@@ -6,7 +6,7 @@ Marketplace Claude Code của nqdev (QuyIT Platform). Mỗi plugin nằm trong m
 
 | Plugin | Phiên bản | Mô tả | Tài liệu |
 |---|---|---|---|
-| `nqdev` | 2.6.0 | Bộ 14 skill và 7 slash command theo flow coding, kèm 4 workflow dựng sẵn (tính năng mới, sửa bug, khởi tạo dự án, release): viết BRD, ước lượng, thiết kế UI, khởi tạo rule cho AI, viết plan, code và sửa bug, sinh test case, viết unit test, review, soạn MR và release note; đồng bộ plan, git, Jira, Google Sheet. | [nqdev/README.md](nqdev/README.md) |
+| `nqdev` | 2.7.0 | Bộ 14 skill và 7 slash command theo flow coding, kèm 4 workflow dựng sẵn (tính năng mới, sửa bug, khởi tạo dự án, release): viết BRD, ước lượng, thiết kế UI, khởi tạo rule cho AI, viết plan, code và sửa bug, sinh test case, viết unit test, review, soạn MR và release note; đồng bộ plan, git, Jira, Google Sheet. | [nqdev/README.md](nqdev/README.md) |
 | `vhs` | 1.0.0 | Bộ 2 skill của ViHAT: tinh chỉnh prompt thô theo lĩnh vực, viết tài liệu hướng dẫn sử dụng từ source code. | [vhs/README.md](vhs/README.md) |
 
 ## Cài đặt
