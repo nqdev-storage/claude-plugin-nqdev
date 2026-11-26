@@ -1,12 +1,12 @@
 {
   "name": "nqdev-init-agents",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "displayName": "nqdev-init-agents",
   "description": "Automated AI Agent Guidance Infrastructure - Initialize CLAUDE.md files, business documentation, agent rules, project-specific rules (.claude/rules/), runtime configuration (.rtk/), OpenCode configuration (.opencode/), and shared permissions settings (.claude/settings.share.json) with explicit CLI control and project guidance in software projects with optional hierarchical scope-specific support",
   "author": "QuyIT Platform",
   "license": "MIT",
   "created_date": "2026-08-10",
-  "updated_date": "2026-11-20",
+  "updated_date": "2026-11-21",
   "status": "Production Ready",
   "category": "Project Setup",
   "tags": [

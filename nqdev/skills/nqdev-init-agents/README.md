@@ -21,7 +21,7 @@ Analyzes a project and creates the guidance files AI agents need (CLAUDE.md, ign
 | `.claudeignore` | Always |
 | `.claude/rules/code-rules.md` and `.claude/.gitignore` | Always |
 | `draft/` and `draft/docs/` (each with `.gitkeep`) plus the matching `.gitignore` block | Always |
-| `docs/Business-Document.md` | When the project has a `docs/` folder |
+| `docs/Business-Document.md` (project-level context; module requirements go in `docs/brd/` via `nqdev-brd-prd-writer`) | When the project has a `docs/` folder |
 | `CLAUDE.md` per layer | `--sub-claude` |
 | `.rtk/`, `.rtk-usage.md` | `--rtk` (auto-detected by default) |
 | `.opencode/opencode.jsonc`, `.env` template | `--opencode` |

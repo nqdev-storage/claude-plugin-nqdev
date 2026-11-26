@@ -3,15 +3,15 @@ name: nqdev-init-agents
 description: "Khởi tạo hạ tầng hướng dẫn cho AI agent trong dự án: CLAUDE.md (gốc hoặc phân cấp), .claudeignore, .claude/rules/code-rules.md (quy tắc DB, git, workflow, comment), tùy chọn .rtk/, .opencode/ và settings. Dùng khi người dùng gõ /nqdev:nqdev-init-agents hoặc yêu cầu \"init agents\", \"tạo CLAUDE.md\", \"setup rule cho AI trong repo\". Không dùng khi người dùng chỉ muốn một CLAUDE.md tóm tắt codebase kiểu lệnh /init có sẵn, hay khi đang làm tính năng (nqdev-task-flow)."
 license: MIT
 compatibility: Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai (không có shell nên in nội dung các file ra chat để người dùng tự lưu)
-version: '1.8.0'
+version: '1.8.1'
 author: QuyIT Platform
 created_date: '2026-08-10'
-updated_date: '2026-11-20'
+updated_date: '2026-11-21'
 metadata:
   author: QuyIT Platform
-  version: "1.8.0"
+  version: "1.8.1"
   created_date: "2026-08-10"
-  updated_date: "2026-11-20"
+  updated_date: "2026-11-21"
 ---
 
 # nqdev-init-agents
@@ -35,7 +35,7 @@ Thứ tự tự chọn, trừ các điểm đánh dấu BẮT BUỘC.
 2. Tạo `CLAUDE.md` gốc: quy ước code, test, deploy, cùng callout "Database Safety", "Git Safety", "Workflow Safety" trỏ tới code-rules.md.
 3. Tạo `.claudeignore` (build artifacts, secrets, vendor).
 4. **BẮT BUỘC, không phụ thuộc flag:** tạo `.claude/rules/code-rules.md` bằng cách chép từ `templates/code-rules.md` của skill này (đường dẫn tính từ thư mục gốc của skill (dòng *Base directory for this skill* mà Claude Code hiện khi nạp skill)), gồm phần Testing (số điện thoại test mặc định `0909090909`, `0765418062`; không dùng số khác) và các policy ở mục "Nội dung code-rules.md" bên dưới, sao chép nguyên văn: Testing, Comment (có label dev), Database Execution Policy, Git Commit Policy, Development Workflow Policy, Task Execution Policy. Tạo `.claude/.gitignore` với `.env`, `*.share.json`, `dev.local.json`.
-5. Thêm phần tùy chọn theo flag (hierarchical, `.rtk/`, `.opencode/`, settings) và `docs/Business-Document.md` nếu có thư mục docs (chép khuôn từ `templates/Business-Document.md` của skill này).
+5. Thêm phần tùy chọn theo flag (hierarchical, `.rtk/`, `.opencode/`, settings) và `docs/Business-Document.md` nếu có thư mục docs (chép khuôn từ `templates/Business-Document.md` của skill này). File này chỉ ở cấp dự án (vision, KPI, budget, rủi ro), không thay BRD theo module trong `docs/brd/` (việc của `nqdev-brd-prd-writer`).
 6. Tạo thư mục nháp `draft/` (xem "Thư mục draft"), không phụ thuộc flag.
 7. Tóm tắt: file đã tạo, file bỏ qua vì đã tồn tại (gồm cả `draft/`).
 

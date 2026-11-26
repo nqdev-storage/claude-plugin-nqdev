@@ -4,6 +4,14 @@ Format: `## [version] — date`. Versions follow Semantic Versioning (MAJOR.MINO
 
 ---
 
+## [1.8.1] — 2026-11-21
+
+### Changed
+- `templates/Business-Document.md`: states it is project-level only and points to `docs/brd/` for module requirements; "Success Criteria" lists project outcomes and points to BRD sections 1 and 7 for MVP scope instead of a feature list; "Related Documents" drops the `SPECS.md` link (not created in target repos) and links `docs/brd/`.
+- `templates/agents.md`: documentation agents read `docs/Business-Document.md` only when it has been filled in.
+- SKILL.md step 5 and README: Business-Document does not replace per-module BRDs (`nqdev-brd-prd-writer`).
+- Existing `docs/Business-Document.md` files in target repos are not overwritten; update them by hand if needed.
+
 ## [1.8.0] — 2026-11-20
 
 ### Added

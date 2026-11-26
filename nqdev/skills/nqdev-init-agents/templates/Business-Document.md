@@ -1,6 +1,8 @@
 # Business Document
 
 > This document provides business context, strategic goals, and key metrics for the project. Share this with stakeholders, investors, and team members to ensure alignment on project vision and success criteria.
+>
+> **Scope:** project level only. Requirements for each module (BR/AC/UC, MVP scope per module) live in `docs/brd/<module>.md`; this document does not repeat them.
 
 ---
 
@@ -193,18 +195,10 @@ What specific problem does this project solve? How does it create value?
 
 ## 🎉 Success Criteria
 
-### Must-Have (MVP)
-- [ ] [Feature/outcome 1]
-- [ ] [Feature/outcome 2]
-- [ ] [Feature/outcome 3]
+Project-level outcomes that mean the project succeeded (tie each to a goal or KPI above). Do not list features here: MVP scope and acceptance criteria per module are in `docs/brd/<module>.md` (section 1 "Phạm vi" and section 7 "Tiêu chí nghiệm thu").
 
-### Should-Have
-- [ ] [Feature/outcome 1]
-- [ ] [Feature/outcome 2]
-
-### Nice-to-Have
-- [ ] [Feature/outcome 1]
-- [ ] [Feature/outcome 2]
+- [ ] [Outcome 1, linked to Goal/KPI]
+- [ ] [Outcome 2, linked to Goal/KPI]
 
 ---
 
@@ -229,7 +223,7 @@ What specific problem does this project solve? How does it create value?
 
 ## 🔗 Related Documents
 
-- **Technical Specification**: See SPECS.md in `/docs`
+- **Module Requirements (BRD)**: `docs/brd/` (one file per module)
 - **Development Guide**: See CLAUDE.md in project root
 - **Project Roadmap**: [Link to roadmap]
 - **Budget Details**: [Link to budget document]

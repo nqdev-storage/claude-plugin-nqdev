@@ -3,15 +3,15 @@ name: nqdev-brd-prd-writer
 description: Viết tài liệu yêu cầu nghiệp vụ BRD theo từng module vào thư mục docs/brd (mỗi module một file), tuân thủ khuôn và quy ước của repo (docs/brd/README.md, docs/brd/_TEMPLATE.md), có mã truy vết BR/AC/UC theo module; PRD là tuỳ chọn khi được yêu cầu rõ. Use when the user asks to write or update a BRD, PRD, tài liệu yêu cầu nghiệp vụ, đặc tả yêu cầu, business/product requirements for a module, or turn raw requirements and meeting notes into business documents. Not for reverse-engineering requirements from source code (nqdev-business-flow-extractor), or effort estimation (nqdev-requirement-estimator).
 license: MIT
 compatibility: Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai
-version: '2.1.3'
+version: '2.1.4'
 author: QuyIT Platform
 created_date: '2026-11-12'
-updated_date: '2026-11-19'
+updated_date: '2026-11-21'
 metadata:
   author: QuyIT Platform
-  version: "2.1.3"
+  version: "2.1.4"
   created_date: "2026-11-12"
-  updated_date: "2026-11-19"
+  updated_date: "2026-11-21"
 ---
 
 # NQDev BRD/PRD Writer

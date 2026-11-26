@@ -131,7 +131,7 @@ Read these scope-specific CLAUDE.md files for your working area:
 ### Documentation Agents
 1. Read DOCUMENTATION.md in templates/
 2. Read docs/CLAUDE.md if it exists
-3. Reference Business-Document.md for context
+3. Reference docs/Business-Document.md for project context only if it has been filled in (skip placeholders); module requirements are in docs/brd/
 4. Follow established writing style
 5. Check `.claude/rules/` for documentation-specific rules
 

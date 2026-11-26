@@ -2,6 +2,19 @@
 
 Các phiên bản trước (khi skill còn tên `nqdev-flow`, tới 1.3.1) chưa có file này; xem mục "Lịch sử thay đổi" trong [nqdev/README.md](../../README.md).
 
+## [1.8.0] - 2026-11-26
+
+### Added
+- Mục *Mốc bước 0 và bước bàn giao*: ghi mốc giờ hệ thống ở lượt đầu tiên làm Bắt đầu dòng 0 của plan, kết thúc lúc duyệt plan; dòng bàn giao bắt đầu ở bước `mr` (hoặc bước chốt), kết thúc khi người dùng xác nhận đã chốt. Khớp `nqdev-write-plan` 1.10.0.
+
+### Changed
+- *Chạy theo lô* không bốc bước 0 và bước bàn giao; bước `code` xong khi hết `todo` trừ dòng bàn giao (cả dấu hiệu "đã xong" trong `references/feature.md`). Lý do: dòng bàn giao chứa commit/push, không được giao cho agent, và chỉ xong sau bước chốt.
+
+## [1.7.1] - 2026-11-26
+
+### Changed
+- Bước nhận kết quả cập nhật cả `time_spent_md` cùng `time_spent_hours`, khớp `nqdev-write-plan` 1.9.0.
+
 ## [1.7.0] - 2026-11-20
 
 ### Changed

@@ -2,6 +2,24 @@
 
 Định dạng theo [Keep a Changelog](https://keepachangelog.com/), phiên bản theo Semantic Versioning.
 
+## [1.10.0] — 2026-11-26
+
+### Added
+- Bảng Tiến độ của plan Pre luôn có dòng `0 | Phân tích và lập plan` và dòng cuối `Bàn giao: commit, push, MR, tracker`; template Post có dòng 0 "Điều tra/phân tích" (khi có) và dòng bàn giao (nếu đã làm). Lý do: case thực tế plan ghi 19 phút trong khi worklog Jira 2h 5m, vì phân tích trước khi có plan và bàn giao sau khi code không có chỗ ghi.
+- Ghi mốc bắt đầu ngay từ đầu phiên (lệnh lấy giờ hệ thống ở lần gọi tool đầu tiên, hoặc thời điểm tin nhắn giao việc). Bước 0 kết thúc lúc plan được duyệt hoặc lúc bắt đầu bước 1, mốc nào đến trước.
+- Quy tắc mốc suy ra (hỏi người dùng, ghi chú "mốc suy ra, chưa xác nhận"), không chồng mốc (cắt tại mốc bắt đầu của bước kế tiếp), và đồng bộ worklog bên ngoài (plan là nguồn đúng, phần chênh ghi ở hàng Tổng).
+- `.jsonl`: bước 0 và bước bàn giao là `step` hợp lệ, `agent: main`; bước bàn giao ở lô cuối, phụ thuộc mọi bước, không giao cho agent.
+
+### Changed
+- `estimated_hours` là end-to-end gồm cả phân tích và bàn giao.
+- Ngưỡng plan lớn "≥ 10 bước" không đếm bước 0 và bước bàn giao.
+- Plan lập trước 1.10.0 thiếu 2 dòng mới: không tự thêm, chỉ đề xuất.
+
+## [1.9.0] — 2026-11-26
+
+### Added
+- Quy đổi giờ sang MD (ngày làm việc, 1 MD = 8h): trường frontmatter `estimated_md` và `time_spent_md`, hàng Tổng ghi kèm MD (`= Xh (Y MD) · Ước lượng: Xh (Y MD)`). MD = số giờ đã làm tròn ÷ 8, làm tròn 0.125 MD gần nhất, đúng nửa bước thì làm tròn lên, giờ > 0 thì tối thiểu 0.125. Giờ vẫn là đơn vị gốc, bước làm tròn giờ (0.5 / 0.25) không đổi. Plan cũ thêm 2 trường ở lần cập nhật đầu.
+
 ## [1.8.0] — 2026-11-20
 
 ### Changed

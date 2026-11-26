@@ -2,6 +2,10 @@
 
 Định dạng theo Semantic Versioning (`MAJOR.MINOR.PATCH`).
 
+## [2.1.4] - 2026-11-21
+### Changed
+- `references/brd-template.md`: dòng "Nên đọc trước" gợi ý `docs/Business-Document.md` (bối cảnh cấp dự án do `nqdev-init-agents` tạo) nếu repo có.
+
 ## [2.1.3] - 2026-11-19
 ### Changed
 - `README.md`: mô tả `nqdev-requirement-estimator` theo giờ (AI làm, DEV review) thay cho person-days, khớp estimator 5.0.0.

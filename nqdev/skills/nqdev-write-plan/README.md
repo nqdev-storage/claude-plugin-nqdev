@@ -2,7 +2,7 @@
 
 Viết **execution plan** (trước khi làm) hoặc **nhật ký công việc** (sau khi làm) thành file markdown trong `plans/` ở gốc repo, và giữ plan khớp tiến độ thật cho tới khi xong.
 
-- **Phiên bản:** 1.8.0 · **Tác giả:** QuyIT Platform · **License:** MIT
+- **Phiên bản:** 1.10.0 · **Tác giả:** QuyIT Platform · **License:** MIT
 - **Hỗ trợ:** Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai
 
 ## Dùng khi nào
@@ -39,9 +39,12 @@ Không dùng để bàn kế hoạch trong chat, viết BRD/PRD (`nqdev-brd-prd-
 
 ## Theo dõi thời gian
 
-- Plan Pre bắt buộc có `estimated_hours` khi lập: giờ, làm tròn 0.5, là tổng end-to-end của mô hình AI làm và DEV review (xem `nqdev-requirement-estimator`).
+- Plan Pre bắt buộc có `estimated_hours` khi lập: giờ, làm tròn 0.5, là tổng end-to-end của mô hình AI làm và DEV review (xem `nqdev-requirement-estimator`), gồm cả phân tích và bàn giao.
+- Bảng Tiến độ luôn có dòng **0 "Phân tích và lập plan"** (bắt đầu từ mốc ghi ngay đầu phiên, kết thúc lúc plan được duyệt) và dòng cuối **"Bàn giao: commit, push, MR, tracker"**, để thời gian trước khi có plan và sau khi code xong không bị mất.
+- Không có mốc thật thì hỏi người dùng, mốc suy ra được ghi chú rõ và không được chồng lên mốc thật của bước khác. Worklog bên ngoài (Jira) lấy số từ plan; người dùng log số khác thì phần chênh ghi ở hàng Tổng.
 - Mỗi lần làm một task, agent ghi mốc **Bắt đầu / Kết thúc** (`YYYY-MM-DD HH:mm`) và **Delta** (số phút thô) vào bảng **Tiến độ**, người dùng xác nhận. Task làm qua nhiều lần thì mỗi lần một dòng, nên thời gian chờ review không được tính.
 - `time_spent_hours` = tổng Delta của mọi task (kể cả task `bỏ`), đổi ra giờ và làm tròn 0.25h. Chỉ làm tròn ở Tổng, không làm tròn từng dòng.
+- Giờ vẫn là đơn vị gốc; kèm quy đổi MD (1 MD = 8h) ở `estimated_md` / `time_spent_md` và hàng Tổng: giờ đã làm tròn ÷ 8, làm tròn 0.125 MD gần nhất (nửa bước làm tròn lên, giờ > 0 thì tối thiểu 0.125).
 - Vượt ước lượng thì chỉ ghi nhận; ước lượng lại phải do người dùng quyết định và được ghi vào Nhật ký thay đổi plan.
 
 ## File giao việc

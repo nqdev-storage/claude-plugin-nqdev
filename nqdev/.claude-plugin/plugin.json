@@ -1,7 +1,7 @@
 {
   "name": "nqdev",
   "displayName": "NQDev Toolkit",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Bộ skill và slash command của nqdev theo flow coding, kèm 4 workflow dựng sẵn (tính năng mới, sửa bug, khởi tạo dự án, release): viết BRD, ước lượng, thiết kế UI, khởi tạo rule cho AI, viết plan, code và sửa bug, sinh test case, viết unit test, review, soạn MR và release note, trích xuất luồng nghiệp vụ; đồng bộ plan/git/Jira/Google Sheet.",
   "author": {
     "name": "Nguyễn Quý"

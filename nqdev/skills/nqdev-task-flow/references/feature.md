@@ -35,7 +35,7 @@ Sau mỗi lệnh, người dùng quay lại bằng `/nqdev:nqdev-task-flow featu
 | `brd` | Có `docs/brd/<module>.md` khớp tính năng |
 | `design` | Có màn trong `docs/prototype/_gen/` ghi `<!--traces: ...-->` trỏ tới mã UC/AC của module, hoặc bảng "Truy vết màn ↔ UC/AC" trong `docs/specs/ui-ux.md` có module này. Bộ prototype cũ chưa có `traces` thì hỏi |
 | `plan` | Có file trong `plans/` nhắc tới tính năng **và** `status: approved`. File có mà còn `todo` nghĩa là chờ duyệt, không phải xong |
-| `code` | Plan lớn có `.jsonl`: mọi dòng `done` hoặc `skipped`. Không có: `git status` hoặc `git diff <nhánh gốc>` có thay đổi ngoài `docs/` và `plans/` |
+| `code` | Plan lớn có `.jsonl`: mọi dòng `done` hoặc `skipped`, trừ dòng bàn giao (dòng cuối). Không có: `git status` hoặc `git diff <nhánh gốc>` có thay đổi ngoài `docs/` và `plans/` |
 | `ship` | Không còn thay đổi chưa commit và nhánh đã có commit mới |
 
 `estimate`, `test`, `review`, `mr` không để lại file; khi không chắc thì hỏi.

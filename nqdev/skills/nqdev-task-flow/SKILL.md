@@ -3,16 +3,16 @@ name: nqdev-task-flow
 description: "Điều phối 4 workflow dựng sẵn của bộ nqdev-: feature (tính năng mới: BRD, estimate, plan, code, test, review, MR), bugfix (sửa bug tới MR), init (khởi tạo dự án), release (review, release note). Mỗi lượt một bước (bước code có thể chạy theo lô từ file giao việc .jsonl), dừng chờ duyệt sau mọi bước, không tự sửa code. Use when the user asks to build or add a feature (\"tạo tính năng\", \"làm chức năng\", \"thêm chức năng\", \"phát triển tính năng\"), fix a bug with an error or wrong behavior (\"sửa bug\", \"fix lỗi\"), prepare a release (\"chuẩn bị release\", \"soạn bản phát hành\"), or start a project (\"khởi tạo dự án\"), or calls /nqdev:nqdev-task-flow. Không dùng cho việc nhỏ một bước (đổi text, thêm log, đổi tên) hay câu hỏi thông tin."
 license: MIT
 compatibility: Claude Code, OpenCode, Gemini CLI, Codex CLI
-version: '1.7.0'
+version: '1.8.0'
 author: QuyIT Platform
 created_date: '2026-11-17'
-updated_date: '2026-11-20'
+updated_date: '2026-11-26'
 argument-hint: "<feature|bugfix|init|release> [mô tả | đường dẫn file] [--from=<bước>] [--no-push]"
 metadata:
   author: QuyIT Platform
-  version: "1.7.0"
+  version: "1.8.0"
   created_date: "2026-11-17"
-  updated_date: "2026-11-20"
+  updated_date: "2026-11-26"
 ---
 
 # nqdev-task-flow
@@ -84,12 +84,19 @@ Plan là cửa vào bước code nên trạng thái duyệt được ghi vào fi
 Dùng khi plan đã `approved`, có `assign_tasks: true` và file `.claude/assign-tasks/<tên plan>.jsonl`, **và** tool hỗ trợ subagent. Plan nhỏ (`assign_tasks: false` hoặc trống) hoặc thiếu điều kiện khác thì làm thẳng theo bảng Tiến độ, bàn giao như cũ: in lệnh `nqdev-feature-implementer` (hoặc `nqdev-bug-fixer`) cho từng bước, mỗi lượt một bước.
 
 1. **Đọc và đối chiếu.** Đọc `.jsonl` và bảng Tiến độ của plan. Lệch nhau hoặc file hỏng thì sinh lại `.jsonl` từ plan (plan là nguồn đúng) rồi mới chạy tiếp.
-2. **Chọn lô.** Lấy các dòng `status: todo` có `batch` nhỏ nhất, và chỉ những dòng có mọi `depends_on` đã `done` (bước `skipped` coi như không chặn). Tối đa 3 bước một lô. Không còn dòng nào chạy được mà vẫn còn `todo` → dừng, báo bước nào đang chặn.
+2. **Chọn lô.** Lấy các dòng `status: todo` có `batch` nhỏ nhất, và chỉ những dòng có mọi `depends_on` đã `done` (bước `skipped` coi như không chặn). Tối đa 3 bước một lô. **Không bốc** bước 0 (phân tích, đã ghi lúc duyệt plan) và bước bàn giao (dòng cuối, xem *Mốc bước 0 và bước bàn giao*). Không còn dòng nào chạy được mà vẫn còn `todo` → dừng, báo bước nào đang chặn.
 3. **Giao việc.** Mỗi bước giao cho đúng `agent` ghi trong dòng, kèm đường dẫn plan và số `step`, để agent chỉ làm đúng bước đó. `agent: main` → agent chính làm, lần lượt từng bước. Trước khi giao: ghi `started_at`, `status: doing` vào `.jsonl` và mốc Bắt đầu vào bảng Tiến độ.
-4. **Nhận kết quả.** Mỗi bước xong thì ghi `ended_at`, `status: done` (hoặc giữ `doing` nếu dừng giữa chừng) vào `.jsonl`, ghi mốc Kết thúc và Delta vào bảng Tiến độ, cập nhật Tổng và `time_spent_hours` theo *Ghi nhận thời gian* của `nqdev-write-plan`. Bước lỗi thì giữ `doing`, ghi lý do vào cột Ghi chú.
-5. **Dừng sau lô.** Báo kết quả từng bước của lô (agent, mốc thời gian, file đã đổi, lỗi nếu có) rồi hỏi duyệt theo *Điểm duyệt*. Duyệt thì quay lại bước 2 để bốc lô sau. Hết `todo` thì bước `code` xong.
+4. **Nhận kết quả.** Mỗi bước xong thì ghi `ended_at`, `status: done` (hoặc giữ `doing` nếu dừng giữa chừng) vào `.jsonl`, ghi mốc Kết thúc và Delta vào bảng Tiến độ, cập nhật Tổng, `time_spent_hours` và `time_spent_md` theo *Ghi nhận thời gian* của `nqdev-write-plan`. Bước lỗi thì giữ `doing`, ghi lý do vào cột Ghi chú.
+5. **Dừng sau lô.** Báo kết quả từng bước của lô (agent, mốc thời gian, file đã đổi, lỗi nếu có) rồi hỏi duyệt theo *Điểm duyệt*. Duyệt thì quay lại bước 2 để bốc lô sau. Hết `todo` (trừ bước bàn giao) thì bước `code` xong.
 
 **Chỉ luồng điều phối được ghi** vào `.jsonl` và plan. Subagent làm xong chỉ trả kết quả, không tự sửa hai file này, để các agent chạy song song không ghi đè nhau.
+
+## Mốc bước 0 và bước bàn giao
+
+Plan theo `nqdev-write-plan` có dòng 0 (phân tích và lập plan) và dòng cuối (bàn giao); chỉ luồng điều phối ghi hai dòng này.
+- **Bước 0:** ở lượt đầu tiên của workflow, chạy lệnh lấy giờ hệ thống và giữ mốc đó. Viết plan thì ghi nó làm Bắt đầu của dòng 0; người dùng duyệt plan thì ghi Kết thúc (đồng thời là lúc `status: approved`).
+- **Bàn giao:** ghi Bắt đầu khi vào bước soạn commit/MR (`mr`) hoặc bước chốt nếu không có `mr`. Ghi Kết thúc khi người dùng quay lại sau khi chạy lệnh chốt và xác nhận đã commit, push, tạo MR, cập nhật tracker. Đợt bàn giao sau là dòng "(tiếp)". Có `.jsonl` thì cập nhật dòng tương ứng cùng lượt.
+- Không có mốc thật (người dùng tự làm ngoài workflow): hỏi thời lượng, ghi theo quy tắc mốc suy ra của `nqdev-write-plan`.
 
 ## Xác định bước bắt đầu
 

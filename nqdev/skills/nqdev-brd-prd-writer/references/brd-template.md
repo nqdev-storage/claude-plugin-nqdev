@@ -2,7 +2,7 @@
 
 > **Dành cho:** <ai đọc: owner module, người duyệt nghiệp vụ, dev module liên quan>.
 > **Đọc để:** biết module <module> phải làm gì, đúng thế nào là đúng, và phạm vi từng giai đoạn.
-> **Nên đọc trước:** <tài liệu mô tả module, tài liệu kiến trúc — đường dẫn tương đối>.
+> **Nên đọc trước:** <tài liệu mô tả module, tài liệu kiến trúc, `docs/Business-Document.md` nếu có (bối cảnh cấp dự án) — đường dẫn tương đối>.
 > **Cập nhật:** YYYY-MM-DD · **Trạng thái:** Nháp | Chờ duyệt | Đã duyệt (người duyệt, ngày)
 > **Nguồn:** <file chốt nghiệp vụ (dòng …), ghi chú họp (ngày), tài liệu hệ cũ (đường dẫn), quyết định đã chốt>
 
