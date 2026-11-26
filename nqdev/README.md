@@ -2,7 +2,7 @@
 
 Bộ **skills** và **slash commands** của nqdev (QuyIT Platform) dành cho Claude Code, đóng gói thành một plugin để cài một lần dùng mọi nơi. Các skill xếp theo các giai đoạn của flow coding, từ thu thập yêu cầu tới deploy.
 
-Phiên bản plugin: **2.7.0** (2026-11-26) · 14 skill (gồm skill điều phối `nqdev-task-flow` với 4 workflow dựng sẵn) · 7 slash command.
+Phiên bản plugin: **2.7.1** (2026-11-26) · 14 skill (gồm skill điều phối `nqdev-task-flow` với 4 workflow dựng sẵn) · 7 slash command.
 
 ## Bắt đầu nhanh: workflow dựng sẵn
 
@@ -179,6 +179,7 @@ Cấu trúc của cả repo (marketplace, `docs/`, CI) xem ở [README của rep
 
 | Ngày | Thay đổi |
 |---|---|
+| 2026-11-26 | Plugin v2.7.1: `nqdev-init-agents` 1.8.2, sửa khối `.gitignore` của `draft/`: `draft/*` ignore luôn thư mục `draft/docs/` nên `!draft/docs/.gitkeep` không có tác dụng; khối mới thêm `!draft/docs/` và `draft/docs/*` trước dòng `!draft/docs/.gitkeep`. Repo đích đã có khối `draft/*` cũ thì skill thay cả khối, không chèn thêm từng dòng; kiểm tra bằng file thử chưa track. |
 | 2026-11-26 | Plugin v2.7.0: `nqdev-write-plan` 1.10.0, quy đổi giờ sang MD (1 MD = 8h, bước 0.125 MD, trường `estimated_md` / `time_spent_md` và hàng Tổng); bảng Tiến độ luôn có dòng `0` "Phân tích và lập plan" (mốc ghi từ đầu phiên) và dòng cuối "Bàn giao: commit, push, MR, tracker"; quy tắc mốc suy ra, không chồng mốc, phần chênh với worklog Jira ghi ở hàng Tổng; `estimated_hours` tính end-to-end. `nqdev-task-flow` 1.8.0, chạy theo lô không bốc bước 0 và bước bàn giao, ghi mốc cho 2 bước này. `nqdev-init-agents` 1.8.1 và `nqdev-brd-prd-writer` 2.1.4, làm rõ ranh giới `docs/Business-Document.md` (cấp dự án) với BRD từng module. Plan cũ không bắt buộc sửa. |
 | 2026-11-20 | Plugin v2.6.0: `nqdev-write-plan` 1.8.0, bảng Tiến độ có cột `Bắt đầu \| Kết thúc \| Delta (phút)` cho từng lần làm task, bỏ mục Nhật ký thời gian, `time_spent_hours` = tổng Delta làm tròn 0.25h ở hàng Tổng; thêm trạng thái `approved`, trường `assign_tasks` và file giao việc `.claude/assign-tasks/<plan>.jsonl` cho plan lớn (≥ 10 bước, hoặc ≥ 40h, hoặc có bước chạy song song). `nqdev-task-flow` 1.7.0, plan lớn chạy bước `code` theo lô (tối đa 3 bước, giao agent theo `.jsonl`, duyệt sau mỗi lô). `nqdev-init-agents` 1.8.0, tạo thư mục `draft/`. |
 | 2026-11-19 | Plugin v2.5.0: `nqdev-write-plan` 1.5.0 đổi Template Pre thành Bối cảnh / Approach và quyết định đã chốt / Tiến độ (bảng `# | Bước | Trạng thái | Ghi chú`, trạng thái `chưa làm` / `đang làm` / `xong` / `bỏ`, thay checklist Todo) / Risks và Unknowns / Tiêu chí hoàn thành / Câu hỏi và Phụ thuộc; `references/example-plan.md` có thêm ví dụ Pre đang làm. Command `/nqdev:nqdev-cmd-plans-cleanup` nhận diện cả tên mục mới lẫn cũ. |

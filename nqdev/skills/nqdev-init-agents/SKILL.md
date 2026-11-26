@@ -3,15 +3,15 @@ name: nqdev-init-agents
 description: "Khởi tạo hạ tầng hướng dẫn cho AI agent trong dự án: CLAUDE.md (gốc hoặc phân cấp), .claudeignore, .claude/rules/code-rules.md (quy tắc DB, git, workflow, comment), tùy chọn .rtk/, .opencode/ và settings. Dùng khi người dùng gõ /nqdev:nqdev-init-agents hoặc yêu cầu \"init agents\", \"tạo CLAUDE.md\", \"setup rule cho AI trong repo\". Không dùng khi người dùng chỉ muốn một CLAUDE.md tóm tắt codebase kiểu lệnh /init có sẵn, hay khi đang làm tính năng (nqdev-task-flow)."
 license: MIT
 compatibility: Claude Code, OpenCode, Gemini CLI, Codex CLI, Claude.ai (không có shell nên in nội dung các file ra chat để người dùng tự lưu)
-version: '1.8.1'
+version: '1.8.2'
 author: QuyIT Platform
 created_date: '2026-08-10'
-updated_date: '2026-11-21'
+updated_date: '2026-11-26'
 metadata:
   author: QuyIT Platform
-  version: "1.8.1"
+  version: "1.8.2"
   created_date: "2026-08-10"
-  updated_date: "2026-11-21"
+  updated_date: "2026-11-26"
 ---
 
 # nqdev-init-agents
@@ -114,14 +114,17 @@ draft/
 ```
 
 - Tạo `draft/.gitkeep` và `draft/docs/.gitkeep` (file rỗng). File nào đã có thì bỏ qua, không ghi đè.
-- Thêm vào `.gitignore` gốc của dự án các dòng sau nếu chưa có (kiểm tra từng dòng, không thêm trùng):
+- Thêm vào `.gitignore` gốc của dự án khối sau nếu chưa có dòng `draft/*`. Đã có khối `draft/*` (bản cũ, thiếu dòng) thì thay cả khối bằng khối dưới, không chèn thêm từng dòng: thứ tự dòng quyết định kết quả, chèn lẻ vào cuối sẽ ignore lại `draft/docs/.gitkeep`:
   ```
   # draft/ là thư mục tạm để lưu các file draft, không commit các file trong đó trừ .gitkeep
   draft/*
   !draft/.gitkeep
+  !draft/docs/
+  draft/docs/*
   !draft/docs/.gitkeep
   ```
-  Chưa có `.gitignore` thì tạo mới chỉ với khối trên.
+  Chưa có `.gitignore` thì tạo mới chỉ với khối trên. Cần `!draft/docs/` và `draft/docs/*`: `draft/*` ignore luôn thư mục `draft/docs/`, Git không đọc vào thư mục đã bị ignore nên `!draft/docs/.gitkeep` đứng một mình không có tác dụng.
+  Kiểm tra bằng file thử **chưa track**: `touch draft/probe.txt draft/docs/probe.txt && git check-ignore -v draft/probe.txt draft/docs/probe.txt`, cả hai phải bị ignore; rồi xóa file thử. Không dùng `git check-ignore` trên `.gitkeep` để kiểm tra: file đã track luôn báo "không bị ignore", kết quả sai lệch.
 - Ghi một dòng vào `CLAUDE.md` gốc: `draft/` chứa file nháp tạm (không commit), `draft/docs/` chứa nháp tài liệu.
 - Mặc định luôn tạo, không có flag bật/tắt.
 

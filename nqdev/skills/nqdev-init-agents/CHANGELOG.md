@@ -4,6 +4,13 @@ Format: `## [version] — date`. Versions follow Semantic Versioning (MAJOR.MINO
 
 ---
 
+## [1.8.2] — 2026-11-26
+
+### Fixed
+- Section "Thư mục draft": the `draft/*` ignore block also ignored the `draft/docs/` directory, so `!draft/docs/.gitkeep` never applied and `draft/docs/.gitkeep` was not committed. The block now re-includes the directory (`!draft/docs/`) and ignores its contents (`draft/docs/*`) before allowing `.gitkeep`.
+- Added a verification step using an untracked probe file (`git check-ignore` on a tracked `.gitkeep` always reports "not ignored" and cannot detect this bug).
+- When the target `.gitignore` already has a `draft/*` block, the skill replaces the whole block instead of appending missing lines (appending `!draft/docs/` and `draft/docs/*` after `!draft/docs/.gitkeep` would ignore `.gitkeep` again).
+
 ## [1.8.1] — 2026-11-21
 
 ### Changed
