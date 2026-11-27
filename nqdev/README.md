@@ -66,20 +66,20 @@ Giai đoạn Lập kế hoạch và Test đã có skill riêng, nhưng `nqdev-ta
 
 | Skill | Phiên bản | Công dụng chính | Vai trò trong flow |
 |---|---|---|---|
-| `nqdev-brd-prd-writer` | 2.1.3 | Biến ý tưởng, ghi chú họp, yêu cầu khách hàng thành BRD, mỗi module một file trong `docs/brd/`, có mã BR/AC/UC. PRD chỉ viết khi được yêu cầu rõ. | Thu thập yêu cầu |
+| `nqdev-brd-prd-writer` | 2.1.4 | Biến ý tưởng, ghi chú họp, yêu cầu khách hàng thành BRD, mỗi module một file trong `docs/brd/`, có mã BR/AC/UC. PRD chỉ viết khi được yêu cầu rõ. | Thu thập yêu cầu |
 | `nqdev-requirement-estimator` | 5.0.0 | Ước lượng theo giờ, bước 0.5 (dạng khoảng; AI làm, DEV review và góp ý) từ mô tả, spec hoặc BRD/PRD; chia module, phase MVP/sau MVP, rủi ro, câu hỏi cần làm rõ. Chỉ đọc. | Phân tích / Estimate |
 | `nqdev-design-to-artifact` | 3.5.1 | Thiết kế màn hình UI ở local từ `docs/prototype/_gen/`, dựng trang bấm thử được, kèm màn System Design. Chỉ publish khi có `--publish`. | Thiết kế (UI/UX) |
-| `nqdev-init-agents` | 1.8.0 | Tạo `CLAUDE.md`, `.claudeignore`, `.claude/rules/code-rules.md` (quy tắc DB, Git, Workflow, Comment, Testing; có quy tắc đề xuất `nqdev-task-flow`) và thư mục `draft/` cho repo. Không ghi đè file đã có. | Setup môi trường AI |
+| `nqdev-init-agents` | 1.8.2 | Tạo `CLAUDE.md`, `.claudeignore`, `.claude/rules/code-rules.md` (quy tắc DB, Git, Workflow, Comment, Testing; có quy tắc đề xuất `nqdev-task-flow`) và thư mục `draft/` cho repo. Không ghi đè file đã có. | Setup môi trường AI |
 | `nqdev-feature-implementer` | 1.1.1 | Code một tính năng theo plan và BRD, tuân thủ quy tắc repo, kèm test và bảng truy vết BR/AC. Không tự commit, push hay chạy lệnh DB. | Code |
 | `nqdev-bug-fixer` | 1.0.1 | Sửa bug theo trình tự: tái hiện, khoanh vùng, nguyên nhân gốc, sửa tối thiểu, test chống tái phát. | Code |
-| `nqdev-write-plan` | 1.8.0 | Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) vào `plans/<stt>-<YYYY-MM-DD>-<slug>.md`, có ước lượng, bảng Tiến độ ghi mốc bắt đầu/kết thúc từng task, cập nhật trạng thái khi làm tiếp hoặc xong. Plan lớn có file giao việc `.claude/assign-tasks/*.jsonl` để chạy theo lô. | Lập kế hoạch |
+| `nqdev-write-plan` | 1.10.0 | Viết execution plan (trước khi làm) hoặc nhật ký công việc (sau khi làm) vào `plans/<stt>-<YYYY-MM-DD>-<slug>.md`, có ước lượng, bảng Tiến độ ghi mốc bắt đầu/kết thúc từng task, cập nhật trạng thái khi làm tiếp hoặc xong. Plan lớn có file giao việc `.claude/assign-tasks/*.jsonl` để chạy theo lô. | Lập kế hoạch |
 | `nqdev-test-case-writer` | 1.0.0 | Sinh test case thủ công từ AC (Cho/Khi/Thì) trong BRD hoặc tài liệu luồng nghiệp vụ; mỗi test case có mã `TC-` và ghi mã AC/BR, kèm ma trận phủ. Chỉ đọc. | Test |
 | `nqdev-unit-test-generator` | 1.0.0 | Viết unit test và integration test cho code có sẵn theo đúng framework và quy ước test của repo; chỉ ghi file test, không sửa code ứng dụng. | Test |
 | `nqdev-code-review` | 1.0.1 | Review diff, MR hoặc nhóm file theo bốn trục: đúng đắn, bảo mật, hiệu năng, quy tắc và yêu cầu. Trả bảng vấn đề theo mức độ. Chỉ đọc. | Review / Refactor |
 | `nqdev-merge-request-writer` | 1.0.2 | Soạn commit message và mô tả MR/PR từ diff, theo quy ước và template của repo, kèm mã BR/AC. Không tự commit, push hay tạo MR. | Review / Refactor |
 | `nqdev-release-note-writer` | 1.0.1 | Tổng hợp release note và checklist deploy (migration, cấu hình, rollback) giữa hai bản phát hành. Không tự tag, push hay deploy. | Deploy |
 | `nqdev-business-flow-extractor` | 1.1.2 | Đọc code để rút ra một luồng nghiệp vụ thành tài liệu cho PM/BA/QA/QC, có sơ đồ Mermaid và phụ lục `file:line`. | Tài liệu hoá |
-| `nqdev-task-flow` | 1.7.0 | Điều phối 4 workflow dựng sẵn (`feature`, `bugfix`, `init`, `release`): tự kích hoạt khi bạn yêu cầu tính năng, sửa bug, release (hỏi trước có chạy workflow không), mỗi lượt một bước, dừng chờ duyệt sau mọi bước, plan phải `approved` mới tới bước code (plan lớn chạy theo lô từ file giao việc, duyệt sau mỗi lô), đưa lệnh cho người dùng gõ ở bước sửa code và commit. Không tự commit hay push. | Điều phối |
+| `nqdev-task-flow` | 1.8.0 | Điều phối 4 workflow dựng sẵn (`feature`, `bugfix`, `init`, `release`): tự kích hoạt khi bạn yêu cầu tính năng, sửa bug, release (hỏi trước có chạy workflow không), mỗi lượt một bước, dừng chờ duyệt sau mọi bước, plan phải `approved` mới tới bước code (plan lớn chạy theo lô từ file giao việc, duyệt sau mỗi lô), đưa lệnh cho người dùng gõ ở bước sửa code và commit. Không tự commit hay push. | Điều phối |
 
 ### Cách gọi skill
 
@@ -170,7 +170,7 @@ Cấu trúc của cả repo (marketplace, `docs/`, CI) xem ở [README của rep
 
 ## Việc còn dở
 
-- Tám skill chỉ có `SKILL.md`, chưa có README, SYSTEM_PROMPT, USER_PROMPT, EXAMPLES: `nqdev-feature-implementer`, `nqdev-bug-fixer`, `nqdev-code-review`, `nqdev-merge-request-writer`, `nqdev-release-note-writer`, `nqdev-business-flow-extractor` (sáu skill này còn thiếu cả CHANGELOG), `nqdev-test-case-writer` và `nqdev-unit-test-generator`.
+- Cả 14 skill đã có README. Mười một skill chưa có SYSTEM_PROMPT, USER_PROMPT, EXAMPLES: `nqdev-bug-fixer`, `nqdev-business-flow-extractor`, `nqdev-code-review`, `nqdev-feature-implementer`, `nqdev-init-agents`, `nqdev-merge-request-writer`, `nqdev-release-note-writer`, `nqdev-task-flow`, `nqdev-test-case-writer`, `nqdev-unit-test-generator`, `nqdev-write-plan`. Bốn skill trong số đó còn thiếu cả CHANGELOG: `nqdev-bug-fixer`, `nqdev-business-flow-extractor`, `nqdev-code-review`, `nqdev-release-note-writer`.
 - `nqdev-task-flow` chưa nối `nqdev-write-plan`, `nqdev-test-case-writer`, `nqdev-unit-test-generator` vào các bước plan và test (hiện viết plan theo khuôn ngắn, chạy lệnh test sẵn có).
 - `nqdev-task-flow` chưa chạy thử trên Claude Code thật: tài liệu Claude Code không nói rõ một skill có nạp được skill khác không. Nếu không được, bước "Gọi skill" tự chuyển thành "Bàn giao" (đưa lệnh cho người dùng gõ).
 - Chưa có skill viết tài liệu cho cả repo (trước đây là `nqdev-codebase-analyst`, đã bỏ).
@@ -198,6 +198,7 @@ Cấu trúc của cả repo (marketplace, `docs/`, CI) xem ở [README của rep
 ## Tài liệu
 
 - [Hướng dẫn cài đặt và sử dụng từ Git repo](../docs/huong-dan-cai-dat-va-su-dung.md)
+- [Giới thiệu các skill: chọn skill theo tình huống, đầu vào và đầu ra](../docs/gioi-thieu-cac-skill.md)
 - [Hướng dẫn nộp plugin lên Claude Plugin Directory](../docs/huong-dan-nop-plugin.md)
 
 ## Tài liệu tham khảo

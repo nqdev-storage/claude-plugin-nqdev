@@ -1,6 +1,6 @@
 # Hướng dẫn nộp plugin `nqdev` lên Claude Plugin Directory
 
-> Cập nhật: 2026-11-18 · Áp dụng cho plugin `nqdev` v1.2.0
+> Cập nhật: 2026-11-27 · Áp dụng cho plugin `nqdev` v2.7.1
 > Nguồn: tài liệu chính thức của Anthropic (liệt kê ở cuối bài). Quy định có thể thay đổi, hãy đối chiếu lại trước khi nộp.
 
 ## 1. Tổng quan
@@ -28,7 +28,9 @@ claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 claude plugin install nqdev@nqdev-marketplace
 ```
 
-Trong phiên Claude Code có thể dùng dạng `/plugin marketplace add ...` và `/plugin install ...`. Khi có bản mới, tăng `version` trong `plugin.json`, push, rồi người dùng cập nhật plugin.
+Trong phiên Claude Code có thể dùng dạng `/plugin marketplace add ...` và `/plugin install ...`.
+
+Khi có bản mới, tăng `version` trong `plugin.json`, đẩy tag `vX.Y.Z` (workflow `publish-dist.yml` cập nhật branch `dist`), rồi người dùng cập nhật plugin.
 
 ## 3. Con đường A: nộp vào Directory chính thức
 
@@ -47,8 +49,10 @@ Trong phiên Claude Code có thể dùng dạng `/plugin marketplace add ...` v�
 - [ ] `version`: nếu có thì **phải tăng ở mỗi lần phát hành**
 - [ ] `description`, `author`, `homepage`, `repository`, `license` đã điền (hiện đã có)
 - [ ] `README.md` ở root plugin (hiện đã có, tiếng Việt)
-- [ ] **Icon**: PNG hoặc JPEG vuông, 512–2048 px mỗi cạnh, dưới 2 MB (không nhận SVG, WebP). Hiện có [nqdev/.claude-plugin/icon.png](../nqdev/.claude-plugin/icon.png) 1024×1024. **Icon chỉ được ghi nhận một lần** ở lần nộp đầu, sửa sau không đổi icon trên listing.
-- [ ] **Bốn URL cho directory** (chỉ đặt trong `plugin.json`, không đặt trong marketplace entry, và đều phải là `https://`):
+- [ ] **Icon**: PNG hoặc JPEG vuông, 512–2048 px mỗi cạnh, dưới 2 MB (không nhận SVG, WebP).
+  - Hiện có [nqdev/.claude-plugin/icon.png](../nqdev/.claude-plugin/icon.png) 1024×1024.
+  - **Icon chỉ được ghi nhận một lần** ở lần nộp đầu, sửa sau không đổi icon trên listing.
+- [ ] **Bốn URL cho Directory** (chỉ đặt trong `plugin.json`, không đặt trong marketplace entry, và đều phải là `https://`):
   - `documentationUrl`: trang tài liệu
   - `supportUrl`: nơi người dùng xin hỗ trợ (ví dụ trang Issues của repo)
   - `privacyPolicyUrl`: chính sách quyền riêng tư
@@ -57,7 +61,7 @@ Trong phiên Claude Code có thể dùng dạng `/plugin marketplace add ...` v�
 
     | Field | URL | Nội dung cần viết |
     |---|---|---|
-    | `documentationUrl` | https://blogs.nhquydev.net/claude-plugin-nqdev/ | Giới thiệu plugin, cách cài, danh sách skill và command, ví dụ dùng |
+    | `documentationUrl` | https://blogs.nhquydev.net/claude-plugin-nqdev/ | Giới thiệu plugin, cách cài, danh sách skill và slash command, ví dụ dùng |
     | `supportUrl` | https://blogs.nhquydev.net/claude-plugin-nqdev/support/ | Cách liên hệ, báo lỗi (link Issues của repo), thời gian phản hồi dự kiến |
     | `privacyPolicyUrl` | https://blogs.nhquydev.net/claude-plugin-nqdev/privacy-policy/ | Dữ liệu nào plugin đọc hoặc gửi đi (Jira, Google Sheet theo cấu hình người dùng), không thu thập gì riêng |
     | `termsOfServiceUrl` | https://blogs.nhquydev.net/claude-plugin-nqdev/terms-of-service/ | Điều khoản sử dụng, giấy phép Apache-2.0, giới hạn trách nhiệm |
@@ -71,8 +75,8 @@ claude plugin validate . --strict
 ```
 
 - `--strict` làm cảnh báo cũng thành lỗi, nên dùng trước khi nộp.
-- Kết quả sạch ở máy **không đảm bảo** qua portal. Portal áp thêm quy tắc riêng của directory.
-- Cài thử local để chắc các skill và command gọi được:
+- Kết quả sạch ở máy **không đảm bảo** qua portal. Portal áp thêm quy tắc riêng của Directory.
+- Cài thử local để chắc các skill và slash command gọi được:
 
 ```bash
 claude plugin marketplace add .
@@ -87,7 +91,7 @@ Vào https://claude.ai/directory/manage (cần đăng nhập). Trang hướng d�
 2. **Source:**
    - *Repository*: `nqdev-storage/claude-plugin-nqdev` (bắt buộc)
    - *Plugin path*: `nqdev` (thư mục chứa `.claude-plugin/plugin.json` của plugin)
-   - *Branch or tag*: để trống để dùng nhánh mặc định, hoặc nhập `main`
+   - *Branch or tag*: nhập `dist`. Repo public chỉ có branch `dist` và `gh-pages`, không có `main`, nên để trống (nhánh mặc định) hay nhập `main` đều không đúng
    - Bấm **Validate** và sửa hết lỗi nếu có.
 3. **Listing details:** chỉ đọc. Nội dung lấy từ `nqdev/.claude-plugin/plugin.json` và `nqdev/README.md`. Muốn đổi thì sửa hai file này rồi validate lại.
 4. **Data handling**, bạn trả lời các câu hỏi về dữ liệu:
@@ -96,7 +100,9 @@ Vào https://claude.ai/directory/manage (cần đăng nhập). Trang hướng d�
    - Giữ dữ liệu bao lâu?
    - Có dành cho người dưới 18 tuổi không?
 
-   Gợi ý cho `nqdev`: plugin chỉ gồm skill và command dạng văn bản, không có server hay hook. Tuy vậy các command Jira và Google Sheet gọi dịch vụ ngoài theo cấu hình của người dùng. Hãy trả lời trung thực theo đúng điều này.
+   Gợi ý cho `nqdev`: plugin chỉ gồm skill và slash command dạng văn bản, không có server hay hook.
+
+   Tuy vậy các slash command Jira và Google Sheet gọi dịch vụ ngoài theo cấu hình của người dùng. Hãy trả lời trung thực theo đúng điều này.
 5. **Compliance:** nhập email liên hệ và tick đủ **bốn** mục xác nhận.
 6. **Review and submit:**
    - *Auto-publish passing versions*: bật nếu muốn bản đạt kiểm tra tự động lên luôn.
@@ -117,7 +123,7 @@ Vào https://claude.ai/directory/manage (cần đăng nhập). Trang hướng d�
 
 ### 4.2. Cập nhật phiên bản
 - Listing luôn phục vụ **bản đã publish gần nhất** cho tới khi có bản mới được publish.
-- Quy trình: sửa code, **tăng `version`**, merge vào nhánh được theo dõi, hệ thống tự nhận bản mới (theo webhook hoặc kiểm tra định kỳ).
+- Quy trình: sửa code, **tăng `version`**, merge vào `main` ở repo phát triển rồi đẩy tag `vX.Y.Z`. Workflow cập nhật nhánh `dist` ở repo public, và hệ thống tự nhận bản mới (theo webhook hoặc kiểm tra định kỳ).
 - Đổi nhánh hoặc tag được theo dõi thì bản đang chạy vẫn giữ nguyên.
 
 ### 4.3. Nếu bị từ chối
@@ -130,15 +136,15 @@ Vào https://claude.ai/directory/manage (cần đăng nhập). Trang hướng d�
 
 | Vấn đề | Việc cần làm |
 |---|---|
-| 4 URL của directory chưa có nội dung | URL đã khai báo trong `plugin.json`. Cần viết và publish đủ 4 trang trên `blogs.nhquydev.net` trước khi nộp. |
-| Command Jira, Google Sheet gọi dịch vụ ngoài | Khai báo rõ ở bước Data handling và trong README. Không nhúng sẵn domain hay token. |
+| 4 URL của Directory chưa có nội dung | URL đã khai báo trong `plugin.json`. Cần viết và publish đủ 4 trang trên `blogs.nhquydev.net` trước khi nộp. Lần kiểm gần nhất (2026-11-20) cả 4 trả HTTP 404, xem [submit-plugin-directory.md](submit-plugin-directory.md) mục 6. |
+| Slash command Jira, Google Sheet gọi dịch vụ ngoài | Khai báo rõ ở bước Data handling và trong README. Không nhúng sẵn domain hay token. |
 | `sync-git-ship`, `sync-status` có commit và push | Hành vi do người dùng tự kích hoạt. Nên nêu rõ trong README để người duyệt không hiểu nhầm. |
 | Tên plugin không đổi được | Chốt `nqdev` ngay từ đầu. Nếu buộc phải đổi, cần khai báo `renames` trong `marketplace.json`. |
 | Icon chỉ ghi nhận một lần | Chốt hình dạng cuối cùng trước lần nộp đầu tiên. |
 
 ## 6. Những điều chưa được kiểm chứng
 
-Các trang sau tôi chưa đọc được tại thời điểm viết bài. Hãy xem trực tiếp trước khi nộp:
+Các nội dung sau chưa được đối chiếu với nguồn gốc tại thời điểm viết bài. Hãy xem trực tiếp trước khi nộp:
 
 - **Form thật trên portal** (cần đăng nhập). Các bước ở mục 3.4 lấy từ tài liệu mô tả form, có thể khác giao diện thực tế.
 - **Pre-submission checklist**: https://claude.com/docs/plugins/pre-submission-checklist (có thể chứa quy tắc chi tiết về icon, privacy policy, support URL và danh sách kiểm tra quét bảo mật).
@@ -147,7 +153,7 @@ Các trang sau tôi chưa đọc được tại thời điểm viết bài. Hãy
 
 - Trang marketplace: https://claude.com/marketplace/plugins
 - Hướng dẫn nộp: https://claude.com/docs/plugins/submit
-- Quy trình publish của directory: https://claude.com/docs/directory/publish
+- Quy trình publish của Directory: https://claude.com/docs/directory/publish
 - Publish plugin (Claude Code docs): https://code.claude.com/docs/en/plugins/publish
 - Plugins reference (schema manifest): https://code.claude.com/docs/en/plugins-reference
 - Plugin marketplaces (marketplace riêng): https://code.claude.com/docs/en/plugin-marketplaces

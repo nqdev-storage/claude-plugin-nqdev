@@ -2,5 +2,6 @@
 - [Plugin nqdev](nqdev/README.md)
 - [Plugin vhs](vhs/README.md)
 - [Hướng dẫn cài đặt và sử dụng](docs/huong-dan-cai-dat-va-su-dung.md)
+- [Giới thiệu các skill](docs/gioi-thieu-cac-skill.md)
 - [Hướng dẫn nộp plugin](docs/huong-dan-nop-plugin.md)
 - [Thông tin submit plugin](docs/submit-plugin-directory.md)

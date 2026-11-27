@@ -1,6 +1,6 @@
 # Hướng dẫn cài đặt và sử dụng plugin `nqdev` từ Git repo
 
-> Cập nhật: 2026-11-18 · Plugin `nqdev` v2.1.0
+> Cập nhật: 2026-11-27 · Plugin `nqdev` v2.7.1
 > Repo: https://github.com/nqdev-storage/claude-plugin-nqdev
 > Áp dụng cho **Claude Code** (CLI và extension IDE). Skill cũng dùng được trên Codex CLI và Gemini CLI, xem mục 9. Plugin này chưa hỗ trợ riêng cho Claude Desktop.
 
@@ -49,7 +49,9 @@ Hoặc gõ trực tiếp trong phiên Claude Code:
 
 Sau khi cài, chạy `/reload-plugins` để áp dụng ngay trong phiên đang mở (hoặc khởi động lại Claude Code).
 
-> **Branch `dist` của repo này chứa gì?** CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) cập nhật nó từ repo phát triển mỗi khi có tag phát hành `vX.Y.Z` (cùng tag đó ở repo này, dùng được với `#vX.Y.Z`), chỉ chứa `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
+> **Branch `dist` của repo này chứa gì?** Chỉ các file cần cài: `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
+>
+> CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) cập nhật nó từ repo phát triển mỗi khi có tag phát hành `vX.Y.Z`. Cùng tag đó có ở repo này, nên dùng được với `#vX.Y.Z`.
 >
 > Đã cài theo lệnh cũ (không có `#dist`, hoặc `#main`): chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh ở Bước 1. Plugin đã cài vẫn giữ tên `<plugin>@nqdev-marketplace`.
 
@@ -76,9 +78,11 @@ Thêm `#<ref>` vào sau nguồn để ghim vào tag hoặc branch. Mỗi bản p
 claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#vX.Y.Z
 ```
 
-Repo `nqdev-storage/claude-plugin-nqdev` phát hành plugin qua branch `dist` (site tài liệu ở `gh-pages`). Cần bản chưa phát hành thì dùng repo phát triển, nếu bạn có quyền truy cập: `nqdev-storage/claude-plugin-nqdev-develop#main` (tải cả repo, gồm `plans/`, `docs/`, `.claude/`).
+Repo `nqdev-storage/claude-plugin-nqdev` phát hành plugin qua branch `dist` (site tài liệu ở `gh-pages`).
 
-> Tôi chưa thấy tài liệu nào mô tả cờ `--ref`. Hãy dùng dạng `#<ref>` ở trên.
+Cần bản chưa phát hành thì dùng repo phát triển, nếu bạn có quyền truy cập: `nqdev-storage/claude-plugin-nqdev-develop#main`. Cách này tải cả repo, gồm `plans/`, `docs/`, `.claude/`.
+
+> Không dùng cờ `--ref`: tài liệu của Claude Code không mô tả cờ này. Hãy dùng dạng `#<ref>` ở trên.
 
 ### 3.4. Cài từ bản clone local (phù hợp khi phát triển hoặc thử nghiệm)
 
@@ -130,7 +134,7 @@ Trong phiên Claude Code, mở `/plugin` rồi chọn tab **Installed**. Nếu c
 
 ### 4.1. Cách gọi
 
-Skill và command của plugin có **tên đầy đủ** dạng `/<plugin>:<tên>`. Gõ `/` rồi tìm theo tên plugin:
+Skill và slash command của plugin có **tên đầy đủ** dạng `/<plugin>:<tên>`. Gõ `/` rồi tìm theo tên plugin:
 
 ```
 /nqdev:sync-status
@@ -139,11 +143,13 @@ Skill và command của plugin có **tên đầy đủ** dạng `/<plugin>:<tên
 
 Tài liệu chỉ ghi rõ dạng có tiền tố plugin. Việc gõ tên ngắn (không có `nqdev:`) có chạy hay không chưa được tài liệu xác nhận, nên hãy dùng dạng đầy đủ để chắc chắn.
 
-Skill còn **tự kích hoạt** khi Claude thấy yêu cầu của bạn khớp với phần `description` của skill, nên nhiều khi chỉ cần mô tả công việc bằng lời, ví dụ: "estimate tài liệu này mất bao lâu", "review giúp đoạn này".
+Skill còn **tự kích hoạt** khi yêu cầu của bạn khớp phần `description` của skill. Nhiều khi chỉ cần mô tả công việc bằng lời, ví dụ: "estimate tài liệu này mất bao lâu", "review giúp đoạn này".
 
-Ba skill `nqdev-feature-implementer`, `nqdev-bug-fixer`, `nqdev-design-to-artifact` **không tự kích hoạt** vì có sửa code hoặc canvas. Phải gọi rõ bằng tên.
+Bốn skill `nqdev-feature-implementer`, `nqdev-bug-fixer`, `nqdev-unit-test-generator`, `nqdev-design-to-artifact` **không tự kích hoạt** vì có sửa code, thêm file test hoặc ghi canvas. Phải gọi rõ bằng tên.
 
-`nqdev-task-flow` tự kích hoạt khi bạn yêu cầu tính năng mới, sửa bug, chuẩn bị release hay khởi tạo dự án, ví dụ chỉ cần gõ "tạo tính năng xuất Excel". Nó luôn hỏi trước bạn muốn chạy workflow hay làm trực tiếp. Để chắc chắn hơn, chạy `/nqdev:nqdev-task-flow init` một lần trong repo: `code-rules.md` sinh ra có quy tắc nhắc Claude đề xuất workflow.
+`nqdev-task-flow` tự kích hoạt khi bạn yêu cầu tính năng mới, sửa bug, chuẩn bị release hay khởi tạo dự án. Ví dụ, chỉ cần gõ "tạo tính năng xuất Excel". Skill luôn hỏi trước bạn muốn chạy workflow hay làm trực tiếp.
+
+Để chắc chắn hơn, chạy `/nqdev:nqdev-task-flow init` một lần trong repo. File `code-rules.md` sinh ra có quy tắc nhắc Claude đề xuất workflow.
 
 ### 4.2. Workflow dựng sẵn (nên bắt đầu từ đây)
 
@@ -164,7 +170,13 @@ Ví dụ một vòng `feature`:
 4. Code xong, gõ `/nqdev:nqdev-task-flow feature --from=test`. Workflow cho bạn xem lại phần code đã đổi, rồi chạy test, review, soạn mô tả MR; mỗi bước đều dừng chờ duyệt.
 5. Cuối cùng workflow đưa lệnh `/nqdev:sync-status --no-push` để bạn tự chốt commit.
 
-Workflow không bao giờ tự sửa code ứng dụng, tự commit hay push. Các bước đó luôn do bạn gõ lệnh.
+Workflow không tự commit hay push, và mặc định không tự sửa code ứng dụng: các bước đó do bạn gõ lệnh.
+
+Ngoại lệ là **plan lớn**: từ 10 bước, hoặc ước lượng từ 40h, hoặc có bước chạy song song. Sau khi bạn duyệt plan và bảng giao việc, bước `code` chạy **theo lô**:
+
+- Tối đa 3 bước một lô, giao cho các agent khai báo trong `.claude/assign-tasks/<tên plan>.jsonl`.
+- Workflow dừng chờ bạn duyệt sau mỗi lô.
+- Cần tool có subagent (như Claude Code). Không có thì workflow bàn giao từng bước như trên.
 
 ### 4.3. Skills (14)
 
@@ -187,7 +199,7 @@ Workflow không bao giờ tự sửa code ứng dụng, tự commit hay push. C�
 
 ### 4.4. Slash commands (7)
 
-| Command | Công dụng | Ví dụ |
+| Slash command | Công dụng | Ví dụ |
 |---|---|---|
 | `/nqdev:nqdev-cmd-plans-cleanup` | Dọn nội dung trùng lặp và frontmatter mâu thuẫn trong `plans/` | `/nqdev:nqdev-cmd-plans-cleanup` |
 | `/nqdev:sync-plan-status` | Cập nhật trạng thái các file plan theo việc đã làm | `/nqdev:sync-plan-status` |
@@ -197,13 +209,13 @@ Workflow không bao giờ tự sửa code ứng dụng, tự commit hay push. C�
 | `/nqdev:tracker-jira-nqdev` | Truy vấn Jira Cloud qua REST API | `/nqdev:tracker-jira-nqdev menu` |
 | `/nqdev:tracker-gs-sync` | Đồng bộ và lọc issue từ Google Sheet theo sprint | `/nqdev:tracker-gs-sync menu` |
 
-Mỗi command có `argument-hint` riêng. Gõ command để xem gợi ý tham số.
+Mỗi slash command có `argument-hint` riêng. Gõ slash command để xem gợi ý tham số.
 
 > **Cẩn thận:** `/nqdev:sync-git-ship` và `/nqdev:sync-status` có thể **commit và push** code. Dùng cờ `--no-push` khi muốn kiểm tra trước, và đọc kỹ danh sách thay đổi trước khi xác nhận.
 
-### 4.5. Cấu hình bắt buộc cho các command Jira
+### 4.5. Cấu hình bắt buộc cho các slash command Jira
 
-Ba command `tracker-jira-nqdev`, `sync-jira-status`, `sync-status` cần ba biến môi trường. Plugin **không** chứa sẵn thông tin đăng nhập hay domain nào.
+Ba slash command `tracker-jira-nqdev`, `sync-jira-status`, `sync-status` cần ba biến môi trường. Plugin **không** chứa sẵn thông tin đăng nhập hay domain nào.
 
 | Biến | Ý nghĩa |
 |---|---|
@@ -229,7 +241,7 @@ export JIRA_EMAIL="you@example.com"
 export JIRA_API_TOKEN="<token>"
 ```
 
-Thiếu biến nào, command sẽ dừng và báo rõ biến thiếu. Không commit token vào repo.
+Thiếu biến nào, slash command sẽ dừng và báo rõ biến thiếu. Không commit token vào repo.
 
 ### 4.6. Plugin `vhs` (cài thêm, tuỳ chọn)
 
@@ -310,7 +322,8 @@ claude plugin install nqdev@nqdev-marketplace --scope project
 ```
 
 - Marketplace sẽ được đăng ký cho các thành viên khi họ tin cậy thư mục dự án.
-- Plugin chỉ bật trong `.claude/settings.json` **không tự tải về** máy thành viên. Tab **Errors** sẽ báo `Plugin "nqdev" is enabled in project settings but isn't installed here`. Mỗi người cần chạy `claude plugin install nqdev@nqdev-marketplace --scope project`.
+- Plugin chỉ bật trong `.claude/settings.json` **không tự tải về** máy thành viên. Tab **Errors** sẽ báo `Plugin "nqdev" is enabled in project settings but isn't installed here`.
+- Mỗi người cần chạy `claude plugin install nqdev@nqdev-marketplace --scope project`.
 
 ## 8. Xử lý sự cố
 
@@ -321,8 +334,8 @@ claude plugin install nqdev@nqdev-marketplace --scope project
 | `Marketplace 'nqdev-marketplace' not found` | Chưa chạy `marketplace add`. Thêm marketplace trước. |
 | `Invalid marketplace source format. Try: owner/repo, https://..., or ./path` | Viết sai nguồn. Link `https://` phải đủ tiền tố. |
 | `SSH authentication failed` / `HTTPS authentication failed` | Lỗi xác thực Git. Xem mục 6. Thử `ssh -T git@github.com` hoặc `git ls-remote <url>`. |
-| Cài xong nhưng không thấy skill/command | Chạy `/reload-plugins`. Mở `/plugin` → tab **Errors** để xem lỗi nạp. |
-| Command Jira báo thiếu biến | Đặt đủ `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` (mục 4.5), rồi mở lại Claude Code. |
+| Cài xong nhưng không thấy skill/slash command | Chạy `/reload-plugins`. Mở `/plugin` → tab **Errors** để xem lỗi nạp. |
+| Slash command Jira báo thiếu biến | Đặt đủ `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` (mục 4.5), rồi mở lại Claude Code. |
 | Gõ `claude plugin add` bị lỗi | Không có lệnh này. Dùng `claude plugin marketplace add` hoặc `claude plugin install`. |
 | Gõ `--project` bị lỗi | Đúng cờ là `--scope project`. |
 
@@ -330,7 +343,9 @@ Chạy lại `/reload-plugins` sau mỗi lần sửa cấu hình. Nếu tải v�
 
 ## 9. Dùng skill trên Codex CLI và Gemini CLI
 
-Hai CLI này không đọc được marketplace của Claude Code, nên cần copy thư mục skill vào chỗ mỗi CLI tìm skill. **Chỉ skill dùng được.** 7 slash command trong `nqdev/commands/` là định dạng riêng của Claude Code, không chạy trên hai CLI này.
+Hai CLI này không đọc được marketplace của Claude Code, nên cần copy thư mục skill vào nơi mỗi CLI tìm skill. **Chỉ skill dùng được.**
+
+7 slash command trong `nqdev/commands/` là định dạng riêng của Claude Code, không chạy trên hai CLI này.
 
 Bước chung: clone repo.
 
@@ -352,7 +367,11 @@ mkdir -p .agents/skills
 cp -r /path/to/claude-plugin-nqdev/nqdev/skills/* .agents/skills/
 ```
 
-Gọi skill bằng `$<tên-skill>`, ví dụ `$nqdev-code-review`. `nqdev-feature-implementer`, `nqdev-bug-fixer` và `nqdev-unit-test-generator` có `agents/openai.yaml` đặt `allow_implicit_invocation: false`, nên Codex chỉ chạy ba skill này khi bạn gọi rõ.
+Gọi skill bằng `$<tên-skill>`, ví dụ `$nqdev-code-review`.
+
+Bốn skill `nqdev-feature-implementer`, `nqdev-bug-fixer`, `nqdev-unit-test-generator` và `nqdev-design-to-artifact` có `agents/openai.yaml` đặt `allow_implicit_invocation: false`.
+
+Vì vậy Codex chỉ chạy bốn skill này khi bạn gọi rõ.
 
 ### 9.2. Gemini CLI
 
@@ -378,5 +397,5 @@ Mở lại Gemini CLI, chạy `/skills list` để kiểm tra.
 ## 10. Tài liệu liên quan
 
 - [README.md](../README.md): tổng quan plugin
-- [docs/huong-dan-nop-plugin.md](huong-dan-nop-plugin.md): hướng dẫn nộp plugin lên directory
+- [docs/huong-dan-nop-plugin.md](huong-dan-nop-plugin.md): hướng dẫn nộp plugin lên Directory
 - Claude Code: [Discover plugins](https://code.claude.com/docs/en/discover-plugins), [Plugins](https://code.claude.com/docs/en/plugins), [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)

@@ -1,9 +1,13 @@
 # Thông tin submit plugin `nqdev` lên Claude Plugin Directory
 
-> Soạn: 2026-11-20 · Plugin `nqdev` v2.6.0 · Form: https://claude.ai/directory/manage/new/plugin
-> Các trường dưới đây đoán theo form tại thời điểm soạn (trang cần đăng nhập, chưa xem trực tiếp), cần đối chiếu form thật. Các bước, điều kiện và cách xử lý sau khi nộp: [Hướng dẫn nộp plugin](huong-dan-nop-plugin.md).
+> Soạn: 2026-11-20, cập nhật phiên bản: 2026-11-27 · Plugin `nqdev` v2.7.1 · Form: https://claude.ai/directory/manage/new/plugin
+> Các trường dưới đây đoán theo form tại thời điểm soạn (trang cần đăng nhập, chưa xem trực tiếp), cần đối chiếu form thật.
+>
+> Các bước, điều kiện và cách xử lý sau khi nộp: [Hướng dẫn nộp plugin](huong-dan-nop-plugin.md).
 
-Theo [hướng dẫn nộp plugin](huong-dan-nop-plugin.md) (mục 3.4), phần **Listing details** của portal là chỉ đọc, lấy từ `nqdev/.claude-plugin/plugin.json` và `nqdev/README.md`. Muốn đổi nội dung listing thì sửa hai file đó rồi validate lại; mục 2 bên dưới dùng để đối chiếu, không phải gõ tay.
+Theo [hướng dẫn nộp plugin](huong-dan-nop-plugin.md) (mục 3.4), phần **Listing details** của portal là chỉ đọc, lấy từ `nqdev/.claude-plugin/plugin.json` và `nqdev/README.md`.
+
+Muốn đổi nội dung listing thì sửa hai file đó rồi validate lại. Mục 2 bên dưới dùng để đối chiếu, không phải gõ tay.
 
 ## 1. Source
 
@@ -20,7 +24,7 @@ Theo [hướng dẫn nộp plugin](huong-dan-nop-plugin.md) (mục 3.4), phần 
 |---|---|
 | Name | `nqdev` (không đổi được sau khi publish) |
 | Display name | NQDev Toolkit |
-| Version | 2.6.0 |
+| Version | 2.7.1 |
 | Author | Nguyễn Quý |
 | License | Apache-2.0 |
 | Repository / Homepage | https://github.com/nqdev-storage/claude-plugin-nqdev |
@@ -78,17 +82,17 @@ claude plugin marketplace add nqdev-storage/claude-plugin-nqdev#dist
 claude plugin install nqdev@nqdev-marketplace
 ```
 
-### Danh sách skill và command
+### Danh sách skill và slash command
 
 Skill (14): `nqdev-brd-prd-writer`, `nqdev-requirement-estimator`, `nqdev-design-to-artifact`, `nqdev-init-agents`, `nqdev-write-plan`, `nqdev-feature-implementer`, `nqdev-bug-fixer`, `nqdev-test-case-writer`, `nqdev-unit-test-generator`, `nqdev-code-review`, `nqdev-merge-request-writer`, `nqdev-release-note-writer`, `nqdev-business-flow-extractor`, `nqdev-task-flow`.
 
-Command (7): `nqdev-cmd-plans-cleanup`, `sync-git-ship`, `sync-jira-status`, `sync-plan-status`, `sync-status`, `tracker-gs-sync`, `tracker-jira-nqdev`.
+Slash command (7): `nqdev-cmd-plans-cleanup`, `sync-git-ship`, `sync-jira-status`, `sync-plan-status`, `sync-status`, `tracker-gs-sync`, `tracker-jira-nqdev`.
 
 Chi tiết từng skill: [nqdev/README.md](../nqdev/README.md).
 
 ## 3. Data handling
 
-Plugin chỉ gồm skill và command dạng Markdown: không có MCP server (`nqdev/.mcp.json` rỗng), không có hook, không có agent. Một số command gọi dịch vụ ngoài bằng thông tin người dùng tự cấu hình.
+Plugin chỉ gồm skill và slash command dạng Markdown: không có MCP server (`nqdev/.mcp.json` rỗng), không có hook, không có agent. Một số slash command gọi dịch vụ ngoài bằng thông tin người dùng tự cấu hình.
 
 | Tích hợp | Dùng ở | Cấu hình | Hành vi |
 |---|---|---|---|
@@ -131,12 +135,12 @@ Plugin chỉ gồm skill và command dạng Markdown: không có MCP server (`nq
 
 ## 6. Checklist trước khi submit
 
-Kiểm tra ngày 2026-11-20:
+Kiểm tra ngày 2026-11-20. Đây là ảnh chụp tại thời điểm đó, chưa kiểm lại: các dòng về HTTP 404, version trên `dist` và tag ở repo public có thể đã đổi, cần kiểm lại trước khi nộp.
 
 - [x] `claude plugin validate ./nqdev --strict` pass (portal còn quét bảo mật và duyệt policy riêng)
 - [x] Icon PNG vuông 1024×1024, 185 KB (yêu cầu 512–2048 px, dưới 2 MB)
 - [x] Branch `dist` ở repo public có `nqdev/.claude-plugin/plugin.json` version 2.5.0, đủ 4 URL
-- [ ] ❌ 4 URL directory đều trả **HTTP 404**: documentation, support, privacy-policy, terms-of-service trên `blogs.nhquydev.net`. Phải publish đủ 4 trang trước khi nộp
+- [ ] ❌ 4 URL Directory đều trả **HTTP 404**: documentation, support, privacy-policy, terms-of-service trên `blogs.nhquydev.net`. Phải publish đủ 4 trang trước khi nộp
 - [ ] `plugin.json` đã lên `2.6.0` (lớn hơn tag `v2.5.1` đang có ở repo public); cần đẩy tag `v2.6.0` để `dist` có bản mới trước khi nộp
 - [ ] `description` trong `plugin.json` chỉ có tiếng Việt. Quyết định có thêm tiếng Anh không (xem mục 2)
 - [ ] Email liên hệ (mục 4)
