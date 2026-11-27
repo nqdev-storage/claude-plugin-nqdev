@@ -1,6 +1,6 @@
 # nqdev-marketplace — Claude Code plugins
 
-Marketplace Claude Code của nqdev (QuyIT Platform). Mỗi plugin nằm trong một thư mục riêng, khai báo trong [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json).
+Marketplace Claude Code của nqdev (QuyIT Platform). Mỗi plugin nằm trong một thư mục riêng, khai báo trong [.claude-plugin/marketplace.json](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/.claude-plugin/marketplace.json).
 
 ## Plugin
 
@@ -53,7 +53,7 @@ claude-plugin-nqdev/
 ## Thêm plugin mới
 
 1. Tạo thư mục `<tên-plugin>/` cùng cấp với `nqdev/`, có `<tên-plugin>/.claude-plugin/plugin.json` và `README.md`.
-2. Thêm một entry vào `plugins` trong [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json) với `"source": "./<tên-plugin>"`.
+2. Thêm một entry vào `plugins` trong [.claude-plugin/marketplace.json](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/.claude-plugin/marketplace.json) với `"source": "./<tên-plugin>"`.
 3. Kiểm tra:
 
    ```bash
@@ -76,4 +76,4 @@ Phục vụ **root repo** bằng một static server rồi mở `/docs/`. `docs/
 
 ## Giấy phép
 
-Apache-2.0 — xem [LICENSE](LICENSE).
+Apache-2.0 — xem [LICENSE](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/LICENSE).

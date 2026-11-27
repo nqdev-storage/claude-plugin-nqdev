@@ -7,6 +7,7 @@
   <meta name="description" content="Tài liệu plugin nqdev cho Claude Code">
   <link rel="icon" href="../nqdev/.claude-plugin/icon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/themes/vue.css">
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
   <div id="app">Đang tải tài liệu...</div>
@@ -19,13 +20,40 @@
       basePath: '../',
       homepage: 'README.md',
       loadSidebar: 'docs/_sidebar.md',
+      // Link trong bài tính từ thư mục của file (như GitHub), nên link sidebar phải bắt đầu bằng '/'.
+      relativePath: true,
+      // Docsify tìm sidebar theo thư mục của trang đang mở; trỏ hết về một file để khỏi 404.
+      alias: { '/.*/docs/_sidebar.md': '/docs/_sidebar.md' },
       subMaxLevel: 2,
       auto2top: true,
       search: {
         placeholder: 'Tìm kiếm',
         noData: 'Không có kết quả',
         depth: 3
-      }
+      },
+      plugins: [
+        function copyCode(hook) {
+          hook.doneEach(function () {
+            if (!navigator.clipboard) return;
+            document.querySelectorAll('.markdown-section pre').forEach(function (pre) {
+              var button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'copy-code';
+              button.textContent = 'Copy';
+              button.setAttribute('aria-live', 'polite');
+              button.addEventListener('click', function () {
+                function show(text) {
+                  button.textContent = text;
+                  setTimeout(function () { button.textContent = 'Copy'; }, 1500);
+                }
+                navigator.clipboard.writeText(pre.querySelector('code').textContent)
+                  .then(function () { show('Đã copy'); }, function () { show('Không copy được'); });
+              });
+              pre.appendChild(button);
+            });
+          });
+        }
+      ]
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/docsify.min.js"></script>

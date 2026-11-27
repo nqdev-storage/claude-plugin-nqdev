@@ -25,7 +25,7 @@ Không cần nhớ lệnh: chỉ cần nói *"tạo tính năng xuất Excel"*, 
 
 Không truyền `--from` thì workflow tự dò repo (`docs/brd/`, `plans/`, `git status`) để đề xuất bước bắt đầu.
 
-Để Claude luôn nhớ đề xuất workflow, chạy `/nqdev:nqdev-task-flow init` (hoặc `/nqdev:nqdev-init-agents`) một lần trong repo: `.claude/rules/code-rules.md` sinh ra có sẵn quy tắc "tính năng, bug, release thì đề xuất `nqdev-task-flow` trước". Repo đã có `code-rules.md` từ trước sẽ không bị ghi đè; tự thêm quy tắc số 0 trong mục "Development Workflow Policy" của [template](skills/nqdev-init-agents/templates/code-rules.md).
+Để Claude luôn nhớ đề xuất workflow, chạy `/nqdev:nqdev-task-flow init` (hoặc `/nqdev:nqdev-init-agents`) một lần trong repo: `.claude/rules/code-rules.md` sinh ra có sẵn quy tắc "tính năng, bug, release thì đề xuất `nqdev-task-flow` trước". Repo đã có `code-rules.md` từ trước sẽ không bị ghi đè; tự thêm quy tắc số 0 trong mục "Development Workflow Policy" của [template](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/nqdev/skills/nqdev-init-agents/templates/code-rules.md).
 
 ## Cài đặt
 
@@ -40,7 +40,7 @@ claude plugin install nqdev@nqdev-marketplace
 
 Trong phiên Claude Code có thể dùng `/plugin marketplace add ...` và `/plugin install nqdev@nqdev-marketplace`. Sau khi sửa file cục bộ, chạy `/reload-plugins`.
 
-Skill cũng dùng được trên Codex CLI và Gemini CLI bằng cách copy thư mục skill. Slash command chỉ dùng được trên Claude Code. Chi tiết: [mục 9 của hướng dẫn cài đặt](../docs/huong-dan-cai-dat-va-su-dung.md#9-dùng-skill-trên-codex-cli-và-gemini-cli).
+Skill cũng dùng được trên Codex CLI và Gemini CLI bằng cách copy thư mục skill. Slash command chỉ dùng được trên Claude Code. Chi tiết: [mục 9 của hướng dẫn cài đặt](../docs/huong-dan-cai-dat-va-su-dung.md).
 
 ## Skills (14)
 
@@ -216,4 +216,4 @@ Các nguồn dùng để xây dựng plugin này:
 
 ## Giấy phép
 
-Apache-2.0 — xem [LICENSE](LICENSE).
+Apache-2.0 — xem [LICENSE](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/nqdev/LICENSE).

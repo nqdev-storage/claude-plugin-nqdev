@@ -17,8 +17,8 @@ Trong phiên đang mở, chạy `/reload-plugins` để áp dụng. Cập nhật
 
 | Skill | Phiên bản | Gọi | Công dụng |
 |---|---|---|---|
-| [trietnm-prompt-tuner](skills/trietnm-prompt-tuner/SKILL.md) | 1.0.0 | `/vhs:trietnm-prompt-tuner <prompt thô>` | Nhận diện lĩnh vực của prompt (code, debug, review, kiến trúc, database, devops, test, tài liệu, ngoài IT), dò context từ workspace rồi viết lại prompt theo mẫu của lĩnh vực đó. Luôn dừng chờ xác nhận [A] chạy / [B] chỉnh / [C] huỷ / [D] lưu file, không tự chạy. |
-| [trietnm-user-doc-writer](skills/trietnm-user-doc-writer/SKILL.md) | 1.0.0 | `/vhs:trietnm-user-doc-writer help \| plan \| full \| module <tên>` | Quét source code, viết tài liệu hướng dẫn sử dụng tiếng Việt cho người dùng cuối vào `docs/user-guide/`, có DOC-PLAN và style guide để các đợt viết nhất quán, kèm placeholder chèn ảnh chụp màn hình. |
+| [trietnm-prompt-tuner](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/vhs/skills/trietnm-prompt-tuner/SKILL.md) | 1.0.0 | `/vhs:trietnm-prompt-tuner <prompt thô>` | Nhận diện lĩnh vực của prompt (code, debug, review, kiến trúc, database, devops, test, tài liệu, ngoài IT), dò context từ workspace rồi viết lại prompt theo mẫu của lĩnh vực đó. Luôn dừng chờ xác nhận [A] chạy / [B] chỉnh / [C] huỷ / [D] lưu file, không tự chạy. |
+| [trietnm-user-doc-writer](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/vhs/skills/trietnm-user-doc-writer/SKILL.md) | 1.0.0 | `/vhs:trietnm-user-doc-writer help \| plan \| full \| module <tên>` | Quét source code, viết tài liệu hướng dẫn sử dụng tiếng Việt cho người dùng cuối vào `docs/user-guide/`, có DOC-PLAN và style guide để các đợt viết nhất quán, kèm placeholder chèn ảnh chụp màn hình. |
 
 Skill cũng tự kích hoạt theo `description` khi yêu cầu khớp, ví dụ "prompt này ok chưa", "viết tài liệu hướng dẫn sử dụng".
 

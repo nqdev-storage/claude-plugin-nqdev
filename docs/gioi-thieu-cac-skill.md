@@ -1,6 +1,6 @@
 # Giới thiệu các skill của plugin `nqdev` và `vhs`
 
-> Cập nhật: 2026-11-27 · Plugin `nqdev` v2.7.1 (14 skill) · Plugin `vhs` v1.0.0 (2 skill)
+> Cập nhật: 2026-11-27 · Plugin `nqdev` v2.7.1 (14 skill) · Plugin `vhs` v1.0.0 (2 skill)\
 > Dành cho người dùng mới cài plugin và muốn biết **nên dùng skill nào, vào lúc nào, nhận lại thứ gì**. Cách cài: [Hướng dẫn cài đặt và sử dụng](huong-dan-cai-dat-va-su-dung.md).
 
 ## 1. Cách đọc trang này

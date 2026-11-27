@@ -1,12 +1,12 @@
 # Hướng dẫn cài đặt và sử dụng plugin `nqdev` từ Git repo
 
-> Cập nhật: 2026-11-27 · Plugin `nqdev` v2.7.1
-> Repo: https://github.com/nqdev-storage/claude-plugin-nqdev
+> Cập nhật: 2026-11-27 · Plugin `nqdev` v2.7.1\
+> Repo: <https://github.com/nqdev-storage/claude-plugin-nqdev>\
 > Áp dụng cho **Claude Code** (CLI và extension IDE). Skill cũng dùng được trên Codex CLI và Gemini CLI, xem mục 9. Plugin này chưa hỗ trợ riêng cho Claude Desktop.
 
 ## 1. Cách hoạt động
 
-Repo này là một **marketplace** (xem [.claude-plugin/marketplace.json](../.claude-plugin/marketplace.json)); plugin `nqdev` nằm trong thư mục [nqdev/](../nqdev/README.md). Vì vậy việc cài gồm **hai bước**:
+Repo này là một **marketplace** (xem [.claude-plugin/marketplace.json](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/.claude-plugin/marketplace.json)); plugin `nqdev` nằm trong thư mục [nqdev/](../nqdev/README.md). Vì vậy việc cài gồm **hai bước**:
 
 1. **Thêm marketplace** từ repo Git: Claude Code clone repo về máy và đọc danh sách plugin.
 2. **Cài plugin** `nqdev` từ marketplace đó.
@@ -51,7 +51,7 @@ Sau khi cài, chạy `/reload-plugins` để áp dụng ngay trong phiên đang 
 
 > **Branch `dist` của repo này chứa gì?** Chỉ các file cần cài: `.claude-plugin/`, `nqdev/`, `vhs/`, `README.md`, `LICENSE` (không có `plans/`, `docs/`, `.claude/`, `CLAUDE.md`).
 >
-> CI ([publish-dist.yml](../.github/workflows/publish-dist.yml)) cập nhật nó từ repo phát triển mỗi khi có tag phát hành `vX.Y.Z`. Cùng tag đó có ở repo này, nên dùng được với `#vX.Y.Z`.
+> CI (`publish-dist.yml`) cập nhật nó từ repo phát triển mỗi khi có tag phát hành `vX.Y.Z`. Cùng tag đó có ở repo này, nên dùng được với `#vX.Y.Z`.
 >
 > Đã cài theo lệnh cũ (không có `#dist`, hoặc `#main`): chạy `claude plugin marketplace remove nqdev-marketplace` rồi add lại bằng lệnh ở Bước 1. Plugin đã cài vẫn giữ tên `<plugin>@nqdev-marketplace`.
 

@@ -1,6 +1,6 @@
 # Hướng dẫn nộp plugin `nqdev` lên Claude Plugin Directory
 
-> Cập nhật: 2026-11-27 · Áp dụng cho plugin `nqdev` v2.7.1
+> Cập nhật: 2026-11-27 · Áp dụng cho plugin `nqdev` v2.7.1\
 > Nguồn: tài liệu chính thức của Anthropic (liệt kê ở cuối bài). Quy định có thể thay đổi, hãy đối chiếu lại trước khi nộp.
 
 ## 1. Tổng quan
@@ -50,7 +50,7 @@ Khi có bản mới, tăng `version` trong `plugin.json`, đẩy tag `vX.Y.Z` (w
 - [ ] `description`, `author`, `homepage`, `repository`, `license` đã điền (hiện đã có)
 - [ ] `README.md` ở root plugin (hiện đã có, tiếng Việt)
 - [ ] **Icon**: PNG hoặc JPEG vuông, 512–2048 px mỗi cạnh, dưới 2 MB (không nhận SVG, WebP).
-  - Hiện có [nqdev/.claude-plugin/icon.png](../nqdev/.claude-plugin/icon.png) 1024×1024.
+  - Hiện có [nqdev/.claude-plugin/icon.png](https://github.com/nqdev-storage/claude-plugin-nqdev/blob/dist/nqdev/.claude-plugin/icon.png) 1024×1024.
   - **Icon chỉ được ghi nhận một lần** ở lần nộp đầu, sửa sau không đổi icon trên listing.
 - [ ] **Bốn URL cho Directory** (chỉ đặt trong `plugin.json`, không đặt trong marketplace entry, và đều phải là `https://`):
   - `documentationUrl`: trang tài liệu

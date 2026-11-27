@@ -1,6 +1,6 @@
 # Thông tin submit plugin `nqdev` lên Claude Plugin Directory
 
-> Soạn: 2026-11-20, cập nhật phiên bản: 2026-11-27 · Plugin `nqdev` v2.7.1 · Form: https://claude.ai/directory/manage/new/plugin
+> Soạn: 2026-11-20, cập nhật phiên bản: 2026-11-27 · Plugin `nqdev` v2.7.1 · Form: <https://claude.ai/directory/manage/new/plugin>\
 > Các trường dưới đây đoán theo form tại thời điểm soạn (trang cần đăng nhập, chưa xem trực tiếp), cần đối chiếu form thật.
 >
 > Các bước, điều kiện và cách xử lý sau khi nộp: [Hướng dẫn nộp plugin](huong-dan-nop-plugin.md).

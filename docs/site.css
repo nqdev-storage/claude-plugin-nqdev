@@ -1,0 +1,49 @@
+/* Chỉnh nhẹ trên theme vue của Docsify. */
+
+/* code trong tiêu đề dùng màu chữ của tiêu đề, không nổi hộp cam */
+.markdown-section h1 code,
+.markdown-section h2 code,
+.markdown-section h3 code,
+.markdown-section h4 code {
+  color: inherit;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* nút copy thay cho nhãn ngôn ngữ ở góc khối code */
+.markdown-section pre::after { content: none; }
+
+.copy-code {
+  position: absolute;
+  top: 0.4em;
+  right: 0.4em;
+  padding: 0.25em 0.7em;
+  font: inherit;
+  font-size: 0.75rem;
+  color: #34495e;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-code:hover,
+.copy-code:focus-visible { border-color: #42b983; }
+
+/* nhóm trong sidebar */
+.sidebar-nav > ul > li > p {
+  margin: 1em 0 0.25em;
+  font-weight: 600;
+  color: #34495e;
+}
+
+@media screen and (max-width: 768px) {
+  /* góc GitHub che tiêu đề; sidebar đã có link GitHub */
+  .github-corner { display: none; }
+  .markdown-section { padding: 24px 16px 48px; }
+  .markdown-section h1 { font-size: 1.6rem; }
+  .markdown-section table { font-size: 0.85rem; }
+  .markdown-section th,
+  .markdown-section td { padding: 6px 8px; }
+}
